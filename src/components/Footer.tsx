@@ -1,0 +1,113 @@
+"use client";
+
+import { useState } from "react";
+import { CheckCircle2, ArrowRight, Camera } from "lucide-react";
+import { motion } from "framer-motion";
+import { useAdminConfig } from "@/context/AdminConfigContext";
+
+export default function Footer() {
+  const { config } = useAdminConfig();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    
+    // Simulate network request for Vercel deployment readiness without backend
+    await new Promise(resolve => setTimeout(resolve, 1500));
+    
+    setIsSubmitting(false);
+    setIsSuccess(true);
+  };
+
+  return (
+    <footer id="contact" className="relative bg-[#08050C] border-t border-white/5 pt-24 pb-12 overflow-hidden">
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-3xl h-[1px] bg-gradient-to-r from-transparent via-rose to-transparent opacity-30" />
+
+      <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-16 mb-20 relative z-10">
+        <div>
+          <h2 className="font-outfit text-4xl md:text-5xl font-bold text-white mb-6">
+            Ready to harness the sun?
+          </h2>
+          <p className="text-slate-400 text-lg mb-8 max-w-md">
+            Reach out to our engineering team today to schedule your site assessment and secure your 72-hour installation window.
+          </p>
+          
+          <div className="flex gap-4 mb-12">
+            <a href={config.socials.x} target="_blank" rel="noopener noreferrer" className="w-12 h-12 rounded-full glass-panel flex items-center justify-center text-white hover:bg-white/10 transition-colors cursor-pointer">
+              X
+            </a>
+            <a href={config.socials.linkedin} target="_blank" rel="noopener noreferrer" className="w-12 h-12 rounded-full glass-panel flex items-center justify-center text-white hover:bg-white/10 transition-colors cursor-pointer">
+              in
+            </a>
+            <a href={config.socials.facebook} target="_blank" rel="noopener noreferrer" className="w-12 h-12 rounded-full glass-panel flex items-center justify-center text-white hover:bg-white/10 transition-colors cursor-pointer">
+              f
+            </a>
+            <a href={config.socials.instagram} target="_blank" rel="noopener noreferrer" className="w-12 h-12 rounded-full glass-panel flex items-center justify-center text-white hover:bg-white/10 transition-colors cursor-pointer">
+              <Camera size={18} />
+            </a>
+          </div>
+        </div>
+
+        <div className="glass-panel p-8 rounded-3xl relative overflow-hidden">
+          <div className="absolute -top-32 -right-32 w-64 h-64 bg-solar/20 blur-[100px] rounded-full pointer-events-none" />
+          
+          {isSuccess ? (
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="h-full flex flex-col items-center justify-center text-center py-12">
+              <CheckCircle2 size={56} className="text-green-400 mb-6" />
+              <h3 className="font-outfit text-2xl font-bold text-white mb-2">Message Sent Successfully</h3>
+              <p className="text-slate-400">Our engineering consultants will review your details and contact you within 2 hours.</p>
+            </motion.div>
+          ) : (
+            <form onSubmit={handleSubmit} className="flex flex-col gap-5 relative z-10">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <div>
+                  <label className="block text-xs font-medium text-slate-400 uppercase tracking-wider mb-2">First Name</label>
+                  <input required type="text" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-rose focus:ring-1 focus:ring-rose transition-all" />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-slate-400 uppercase tracking-wider mb-2">Last Name</label>
+                  <input required type="text" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-rose focus:ring-1 focus:ring-rose transition-all" />
+                </div>
+              </div>
+              
+              <div>
+                <label className="block text-xs font-medium text-slate-400 uppercase tracking-wider mb-2">Email Address</label>
+                <input required type="email" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-rose focus:ring-1 focus:ring-rose transition-all" />
+              </div>
+
+              <div>
+                <label className="block text-xs font-medium text-slate-400 uppercase tracking-wider mb-2">Message / Property Details</label>
+                <textarea required rows={4} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-rose focus:ring-1 focus:ring-rose transition-all resize-none" />
+              </div>
+
+              <button type="submit" disabled={isSubmitting} className="group flex items-center justify-center gap-2 w-full py-4 bg-white text-obsidian font-bold rounded-xl hover:bg-slate-200 transition-colors mt-2 h-14">
+                {isSubmitting ? (
+                  <div className="w-6 h-6 border-2 border-obsidian border-t-transparent rounded-full animate-spin" />
+                ) : (
+                  <>Submit Request <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" /></>
+                )}
+              </button>
+            </form>
+          )}
+        </div>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-6 border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-slate-500">
+        <div className="flex items-center gap-2 font-outfit font-bold text-white text-xl">
+          <div className="w-6 h-6 rounded-full bg-gradient-to-tr from-solar to-amber flex items-center justify-center text-obsidian text-xs">M</div>
+          MjSolar
+        </div>
+        <div className="flex gap-6">
+          <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
+          <a href="#" className="hover:text-white transition-colors">Terms of Service</a>
+          <a href="#" className="hover:text-white transition-colors">Enterprise SLA</a>
+        </div>
+        <div>
+          &copy; {new Date().getFullYear()} MjSolar Engineering Inc. All rights reserved.
+        </div>
+      </div>
+    </footer>
+  );
+}
