@@ -5,7 +5,7 @@ import dynamic from 'next/dynamic';
 import Header from "@/components/Header";
 import HeroSection from "@/components/HeroSection";
 
-const ValueProps = dynamic(() => import("@/components/ValueProps"));
+const OurStandards = dynamic(() => import("@/components/OurStandards"));
 const RoiCalculator = dynamic(() => import("@/components/RoiCalculator"));
 const DashboardDemo = dynamic(() => import("@/components/DashboardDemo"));
 const Footer = dynamic(() => import("@/components/Footer"));
@@ -60,7 +60,7 @@ export default function Home() {
         }} 
       />
       
-      <ValueProps />
+      <OurStandards />
       <RoiCalculator />
       <DashboardDemo />
       <Footer />

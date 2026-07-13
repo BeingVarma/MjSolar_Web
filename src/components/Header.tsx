@@ -14,7 +14,7 @@ export default function Header({ introState = "finished" }: { introState?: Intro
   const { t, language, setLanguage } = useI18n();
 
   const NAV_LINKS = [
-    { name: t("navServices"), href: "#services" },
+    { name: t("navStandards"), href: "#standards" },
     { name: t("navCalculator"), href: "#calculator" },
     { name: t("navDashboard"), href: "#dashboard" },
     { name: t("navContact"), href: "#contact" },
