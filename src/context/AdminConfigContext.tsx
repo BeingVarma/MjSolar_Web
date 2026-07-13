@@ -13,6 +13,28 @@ export interface AdminConfig {
     comStep: number;
     comDefault: number;
   };
+  pricing: {
+    costPerKwRes: number;
+    costPerKwCom: number;
+  };
+  assumptions: {
+    tariffRes: number; // ₹ per unit
+    tariffCom: number;
+    exportTariff: number; // ₹ per unit exported
+    generationPerKw: number; // units per kW per month
+    degradationRate: number; // % loss per year
+    inflationRate: number; // % electricity price increase per year
+  };
+  subsidies: {
+    subsidyPerKwRes: number; // ₹ per kW
+    maxSubsidyKwRes: number; // max kW eligible
+    subsidyPerKwCom: number;
+    maxSubsidyKwCom: number;
+  };
+  warranty: {
+    panels: number; // years
+    inverter: number; // years
+  };
   dashboard: {
     homeMultiplier: number;
     warehouseMultiplier: number;
@@ -30,13 +52,35 @@ export interface AdminConfig {
 const defaultConfig: AdminConfig = {
   roi: {
     resMin: 500,
-    resMax: 10000,
+    resMax: 20000,
     resStep: 500,
     resDefault: 4000,
-    comMin: 25000,
+    comMin: 20000,
     comMax: 1000000,
     comStep: 5000,
     comDefault: 150000,
+  },
+  pricing: {
+    costPerKwRes: 65000,
+    costPerKwCom: 55000,
+  },
+  assumptions: {
+    tariffRes: 8.5,
+    tariffCom: 10.5,
+    exportTariff: 3.5,
+    generationPerKw: 120,
+    degradationRate: 0.005,
+    inflationRate: 0.05,
+  },
+  subsidies: {
+    subsidyPerKwRes: 15000, // Roughly standard residential subsidy up to 3kW
+    maxSubsidyKwRes: 3,
+    subsidyPerKwCom: 0,
+    maxSubsidyKwCom: 0,
+  },
+  warranty: {
+    panels: 25,
+    inverter: 10,
   },
   dashboard: {
     homeMultiplier: 120.5,

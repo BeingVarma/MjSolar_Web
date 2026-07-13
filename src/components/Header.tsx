@@ -54,7 +54,7 @@ export default function Header({ introState = "finished" }: { introState?: Intro
             {t("getQuote")}
           </a>
           <button
-            onClick={() => setLanguage(language === "en" ? "hi" : "en")}
+            onClick={() => setLanguage(language === "en" ? "hi" : language === "hi" ? "te" : "en")}
             className="px-3 py-1 rounded border border-white/20 text-xs font-bold hover:bg-white/10 transition-colors uppercase"
             aria-label="Toggle language"
           >

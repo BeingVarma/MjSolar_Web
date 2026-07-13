@@ -12,18 +12,19 @@ type I18nContextType = {
 const I18nContext = createContext<I18nContextType | undefined>(undefined);
 
 export function I18nProvider({ children }: { children: React.ReactNode }) {
-  const [language, setLanguage] = useState<Language>("en");
+  const [language, setLanguageState] = useState<Language>("en");
 
   useEffect(() => {
-    const saved = localStorage.getItem("mjsolar_lang") as Language;
-    if (saved === "en" || saved === "hi") {
-      setLanguage(saved);
+    const savedLang = localStorage.getItem("language") as Language;
+    if (savedLang && (savedLang === "en" || savedLang === "hi" || savedLang === "te")) {
+      setLanguageState(savedLang);
+      document.documentElement.lang = savedLang;
     }
   }, []);
 
   const handleSetLanguage = (lang: Language) => {
-    setLanguage(lang);
-    localStorage.setItem("mjsolar_lang", lang);
+    setLanguageState(lang);
+    localStorage.setItem("language", lang);
     document.documentElement.lang = lang;
   };
 
