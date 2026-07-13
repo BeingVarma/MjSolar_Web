@@ -57,6 +57,7 @@ export default function Header({ introState = "finished" }: { introState?: Intro
           ))}
           <a
             href="#contact"
+            aria-label={t("getQuote")}
             className="px-6 py-2.5 rounded-full bg-gradient-to-r from-solar to-amber text-obsidian font-semibold text-sm hover:shadow-[0_0_20px_rgba(255,96,0,0.4)] transition-all transform hover:scale-105"
           >
             {t("getQuote")}

@@ -4,7 +4,7 @@ export const translations = {
     navCalculator: "Savings Calculator",
     navDashboard: "Dashboard Demo",
     navContact: "Contact",
-    getQuote: "Get Free Quote",
+    getQuote: "Free Site Visit",
     nextGen: "Next-Gen Energy Architecture",
     pureSolar: "Pure Solar Energy.",
     engineered: "Engineered in 72 Hours.",
