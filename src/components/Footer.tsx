@@ -5,12 +5,14 @@ import { Camera, Send, CheckCircle2 } from "lucide-react";
 import { motion } from "framer-motion";
 import { useAdminConfig } from "@/context/AdminConfigContext";
 import { useI18n } from "@/context/I18nContext";
+import LegalModal from "./LegalModal";
 
 export default function Footer() {
   const { config } = useAdminConfig();
   const { t } = useI18n();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [activeModal, setActiveModal] = useState<'privacy' | 'terms' | 'sla' | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -98,22 +100,34 @@ export default function Footer() {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-slate-500">
-        <div className="flex items-center gap-2 font-outfit font-bold text-white text-xl">
-          <div className="w-6 h-6 rounded-full bg-gradient-to-tr from-solar to-amber flex items-center justify-center text-obsidian text-xs">M</div>
-          MjSolar
+      <div className="max-w-7xl mx-auto px-6 border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-6 text-sm text-slate-500">
+        <div className="flex flex-col md:flex-row items-center gap-2 order-3 md:order-1 font-medium">
+          <span className="text-slate-400">Developed by</span>
+          <a 
+            href="https://shancom.in/" 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            className="text-slate-300 hover:text-solar transition-colors duration-300 relative group"
+          >
+            Shancom Solutions
+            <span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-solar transition-all duration-300 group-hover:w-full"></span>
+          </a>
         </div>
-        <div className="flex gap-6">
-          <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
-          <a href="#" className="hover:text-white transition-colors">Terms of Service</a>
-          <a href="#" className="hover:text-white transition-colors">Enterprise SLA</a>
+        <div className="flex gap-6 order-1 md:order-2">
+          <button onClick={() => setActiveModal('privacy')} className="hover:text-white transition-colors">Privacy Policy</button>
+          <button onClick={() => setActiveModal('terms')} className="hover:text-white transition-colors">Terms of Service</button>
+          <button onClick={() => setActiveModal('sla')} className="hover:text-white transition-colors">Enterprise SLA</button>
         </div>
-        <div className="flex flex-col md:flex-row items-center gap-2">
+        <div className="flex items-center gap-2 order-2 md:order-3">
           <span>&copy; {new Date().getFullYear()} MjSolar Engineering Inc. All rights reserved.</span>
-          <span className="hidden md:inline">•</span>
-          <span>Developed by <a href="https://shancom.in/" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors underline decoration-white/20 underline-offset-2">Shancom Solutions</a></span>
         </div>
       </div>
+
+      <LegalModal 
+        isOpen={activeModal !== null} 
+        onClose={() => setActiveModal(null)} 
+        type={activeModal} 
+      />
     </footer>
   );
 }
