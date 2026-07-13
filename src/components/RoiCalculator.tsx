@@ -2,22 +2,25 @@
 
 import { motion, useMotionValue, useTransform, animate } from "framer-motion";
 import { useEffect, useState } from "react";
+import { IndianRupee, TrendingUp, SunMedium, Building2, Home } from "lucide-react";
 import { useAdminConfig } from "@/context/AdminConfigContext";
+import { useI18n } from "@/context/I18nContext";
 
 export default function RoiCalculator() {
   const { config } = useAdminConfig();
-  const [isCommercial, setIsCommercial] = useState(false);
+  const { t } = useI18n();
+  const [mode, setMode] = useState<"res" | "com">("res");
+  const isCommercial = mode === "com";
   
-  // Use state but initialize safely. We will update bill when toggling or when config changes if needed.
   const [bill, setBill] = useState(config.roi.resDefault);
 
   const breakEvenYears = isCommercial ? 4.8 : 4.2;
+  const savings = bill * 12 * 0.90; // Simplified for this example structure
 
   const minBill = isCommercial ? config.roi.comMin : config.roi.resMin;
   const maxBill = isCommercial ? config.roi.comMax : config.roi.resMax;
   const step = isCommercial ? config.roi.comStep : config.roi.resStep;
 
-  // Format the text for slider endpoints dynamically
   const formatLabel = (val: number) => {
     if (val >= 100000) {
       return `₹${val / 100000} Lakh${val >= 1000000 ? "s+" : ""}`;
@@ -25,32 +28,14 @@ export default function RoiCalculator() {
     return `₹${val.toLocaleString('en-IN')}${val >= 10000 ? '+' : ''}`;
   };
 
+  const formatIndianCurrency = (val: number) => Math.round(val).toLocaleString('en-IN');
+
   const minLabel = formatLabel(minBill);
   const maxLabel = formatLabel(maxBill);
 
-  const handleToggle = (commercial: boolean) => {
-    setIsCommercial(commercial);
-    setBill(commercial ? config.roi.comDefault : config.roi.resDefault);
-  };
-
-  const targetYear1 = bill * 12 * 0.90; // 90% offset
-  const targetYear10 = targetYear1 * 10 * 1.15; // 15% energy cost inflation
-
-  const year1Value = useMotionValue(0);
-  const year10Value = useMotionValue(0);
-
-  const year1Rounded = useTransform(year1Value, (latest) => `₹${Math.round(latest).toLocaleString('en-IN')}`);
-  const year10Rounded = useTransform(year10Value, (latest) => `₹${Math.round(latest).toLocaleString('en-IN')}`);
-
   useEffect(() => {
-    const controls1 = animate(year1Value, targetYear1, { duration: 0.8, ease: "easeOut" });
-    const controls10 = animate(year10Value, targetYear10, { duration: 1.2, ease: "easeOut" });
-
-    return () => {
-      controls1.stop();
-      controls10.stop();
-    };
-  }, [targetYear1, targetYear10, year1Value, year10Value]);
+    setBill(isCommercial ? config.roi.comDefault : config.roi.resDefault);
+  }, [mode, config.roi]);
 
   return (
     <section id="calculator" className="py-24 relative bg-obsidian">
@@ -58,11 +43,13 @@ export default function RoiCalculator() {
       
       <div className="max-w-5xl mx-auto px-6 relative z-10">
         <div className="glass-panel p-8 md:p-12 rounded-[2rem] border-rose/20">
-          <div className="text-center mb-12">
-            <h2 className="font-outfit text-4xl font-bold text-white mb-4">
-              Interactive ROI Calculator
+          <div className="text-center mb-16 relative z-10">
+            <h2 className="font-outfit text-4xl md:text-5xl font-bold text-white mb-4">
+              {t("roiTitle")}
             </h2>
-            <p className="text-slate-400">Discover your potential savings in real-time.</p>
+            <p className="text-slate-400 text-lg max-w-2xl mx-auto">
+              {t("roiSub")}
+            </p>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
@@ -70,26 +57,22 @@ export default function RoiCalculator() {
             <div className="space-y-8">
               <div className="flex bg-white/5 p-1 rounded-full w-max">
                 <button
-                  className={`px-6 py-2 rounded-full text-sm font-medium transition-all ${
-                    !isCommercial ? "bg-rose text-white shadow-lg" : "text-slate-400 hover:text-white"
-                  }`}
-                  onClick={() => handleToggle(false)}
+                  onClick={() => setMode("res")}
+                  className={`flex items-center gap-2 px-6 py-3 rounded-full font-bold transition-all ${mode === "res" ? "bg-amber text-obsidian shadow-lg" : "text-slate-400 hover:text-white"}`}
                 >
-                  Residential
+                  <Home size={18} /> {t("resMode")}
                 </button>
                 <button
-                  className={`px-6 py-2 rounded-full text-sm font-medium transition-all ${
-                    isCommercial ? "bg-solar text-white shadow-lg" : "text-slate-400 hover:text-white"
-                  }`}
-                  onClick={() => handleToggle(true)}
+                  onClick={() => setMode("com")}
+                  className={`flex items-center gap-2 px-6 py-3 rounded-full font-bold transition-all ${mode === "com" ? "bg-solar text-obsidian shadow-lg" : "text-slate-400 hover:text-white"}`}
                 >
-                  Commercial
+                  <Building2 size={18} /> {t("comMode")}
                 </button>
               </div>
 
               <div>
                 <label className="block text-slate-300 mb-4 font-medium flex flex-wrap gap-2 items-center">
-                  Average Monthly Electricity Bill: 
+                  {t("monthlyBill")}: 
                   <span className="text-amber font-bold text-lg">
                     {bill >= 100000 
                       ? `₹${(bill / 100000).toLocaleString('en-IN')} Lakh${bill >= maxBill ? '+' : ''}` 
@@ -113,22 +96,24 @@ export default function RoiCalculator() {
             </div>
 
             {/* Outputs */}
-            <div className="space-y-6">
-              <div className="glass-panel bg-white/5 p-6 rounded-2xl border-white/5">
-                <p className="text-slate-400 text-sm mb-1">Estimated Year 1 Savings</p>
-                <motion.span className="font-outfit text-3xl md:text-4xl font-bold text-white block truncate">
-                  {year1Rounded}
-                </motion.span>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="bg-white/5 border border-white/10 p-6 rounded-2xl flex flex-col items-center justify-center relative overflow-hidden group">
+                <div className="absolute inset-0 bg-gradient-to-tr from-amber/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                <TrendingUp size={24} className="text-amber mb-3" />
+                <div className="text-slate-400 text-sm font-medium uppercase tracking-wider mb-2">{t("estSavings")}</div>
+                <div className="font-outfit text-3xl font-bold text-white flex items-baseline gap-1">
+                  <span className="text-xl text-amber">₹</span>
+                  {formatIndianCurrency(savings)}
+                </div>
               </div>
               
-              <div className="glass-panel bg-gradient-to-br from-solar/20 to-amber/5 p-6 rounded-2xl border-solar/30">
-                <p className="text-amber/80 text-sm mb-1 font-medium">10-Year Cumulative Savings</p>
-                <motion.span className="font-outfit text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-solar to-amber block mb-2 truncate">
-                  {year10Rounded}
-                </motion.span>
-                <p className="text-slate-300 text-sm">
-                  Pays for itself in <span className="text-white font-bold">{breakEvenYears} years</span>
-                </p>
+              <div className="bg-white/5 border border-white/10 p-6 rounded-2xl flex flex-col items-center justify-center relative overflow-hidden group">
+                <div className="absolute inset-0 bg-gradient-to-tr from-solar/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                <SunMedium size={24} className="text-solar mb-3" />
+                <div className="text-slate-400 text-sm font-medium uppercase tracking-wider mb-2">{t("paybackPeriod")}</div>
+                <div className="font-outfit text-3xl font-bold text-white flex items-baseline gap-2">
+                  {breakEvenYears} <span className="text-lg text-slate-400 font-inter font-normal">{t("years")}</span>
+                </div>
               </div>
             </div>
           </div>

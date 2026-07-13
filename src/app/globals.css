@@ -25,6 +25,13 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Accessibility Focus Rings */
+*:focus-visible {
+  outline: 2px solid var(--color-amber);
+  outline-offset: 4px;
+  border-radius: 2px;
+}
+
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
   width: 10px;

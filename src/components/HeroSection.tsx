@@ -4,14 +4,32 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Play, Volume2, VolumeX } from "lucide-react";
 import { useRef, useEffect, useState } from "react";
 import { IntroState } from "@/app/page";
+import { useI18n } from "@/context/I18nContext";
 
 export default function HeroSection({ introState = "finished", onIntroEnd }: { introState?: IntroState, onIntroEnd?: () => void }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isMuted, setIsMuted] = useState(true);
+  const { t } = useI18n();
 
   useEffect(() => {
-    if (introState === "playing" && videoRef.current) {
-      videoRef.current.play();
+    const vid = videoRef.current;
+    if (!vid) return;
+
+    if (introState === "playing") {
+      vid.play().catch((err) => console.warn("Autoplay prevented:", err));
+    } else if (introState === "finished") {
+      vid.pause();
+      const setLastFrame = () => {
+        if (vid.duration) {
+          vid.currentTime = Math.max(0, vid.duration - 0.1);
+        }
+      };
+      
+      if (vid.readyState >= 1) {
+        setLastFrame();
+      } else {
+        vid.addEventListener("loadedmetadata", setLastFrame, { once: true });
+      }
     }
   }, [introState]);
 
@@ -31,7 +49,6 @@ export default function HeroSection({ introState = "finished", onIntroEnd }: { i
         
         <video
           ref={videoRef}
-          autoPlay
           muted={isMuted}
           playsInline
           preload="auto"
@@ -63,9 +80,10 @@ export default function HeroSection({ introState = "finished", onIntroEnd }: { i
               exit={{ opacity: 0, scale: 0.8 }}
               transition={{ duration: 0.5 }}
               onClick={() => setIsMuted(!isMuted)}
+              aria-label={isMuted ? "Unmute background video" : "Mute background video"}
               className="absolute bottom-10 right-10 z-50 w-12 h-12 rounded-full glass-panel flex items-center justify-center text-white hover:bg-white/10 hover:shadow-[0_0_15px_rgba(255,158,0,0.4)] transition-all cursor-pointer"
             >
-              {isMuted ? <VolumeX size={20} /> : <Volume2 size={20} />}
+              {isMuted ? <VolumeX size={20} aria-hidden="true" /> : <Volume2 size={20} aria-hidden="true" />}
             </motion.button>
           )}
         </AnimatePresence>
@@ -82,7 +100,7 @@ export default function HeroSection({ introState = "finished", onIntroEnd }: { i
                 transition={{ duration: 1.2, ease: "easeOut" }}
                 className="inline-block px-4 py-1.5 rounded-full border border-rose/30 bg-rose/10 text-rose backdrop-blur-md text-sm font-semibold mb-6 shadow-[0_0_15px_rgba(224,83,117,0.3)]"
               >
-                Next-Gen Energy Architecture
+                {t("nextGen")}
               </motion.div>
 
               <motion.h1
@@ -91,10 +109,10 @@ export default function HeroSection({ introState = "finished", onIntroEnd }: { i
                 transition={{ duration: 1.2, delay: 0.1, ease: "easeOut" }}
                 className="font-outfit text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight text-white mb-6 leading-[1.1]"
               >
-          Pure Solar Energy.
+          {t("pureSolar")}
           <br />
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber to-solar">
-            Engineered in 72 Hours.
+            {t("engineered")}
           </span>
         </motion.h1>
 
@@ -104,7 +122,7 @@ export default function HeroSection({ introState = "finished", onIntroEnd }: { i
                 transition={{ duration: 1.2, delay: 0.2, ease: "easeOut" }}
                 className="max-w-2xl text-lg md:text-xl text-slate-300 font-inter mb-10"
               >
-                Powering premium residences and commercial hubs with the world’s highest-efficiency panels. Zero downtime. Maximum yield.
+                {t("heroSub")}
               </motion.p>
 
               <motion.div
@@ -118,14 +136,14 @@ export default function HeroSection({ introState = "finished", onIntroEnd }: { i
                   className="group relative px-8 py-4 bg-gradient-to-r from-solar to-amber rounded-full text-obsidian font-bold text-lg overflow-hidden transition-all hover:scale-105 shadow-[0_0_30px_rgba(255,96,0,0.4)]"
                 >
                   <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-in-out" />
-                  <span className="relative z-10">Calculate Your Savings</span>
+                  <span className="relative z-10">{t("calcSavings")}</span>
                 </a>
 
-                <button className="group flex items-center gap-3 px-6 py-4 rounded-full glass-panel hover:bg-white/10 transition-colors">
+                <button aria-label="Watch our installation process video" className="group flex items-center gap-3 px-6 py-4 rounded-full glass-panel hover:bg-white/10 transition-colors">
                   <div className="w-10 h-10 rounded-full bg-white text-obsidian flex items-center justify-center group-hover:scale-110 transition-transform">
-                    <Play size={18} className="ml-1" />
+                    <Play size={18} className="ml-1" aria-hidden="true" />
                   </div>
-                  <span className="font-semibold text-white">Watch Our Process</span>
+                  <span className="font-semibold text-white">{t("watchProcess")}</span>
                 </button>
               </motion.div>
             </>

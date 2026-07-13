@@ -1,30 +1,33 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Clock, Zap, Building2 } from "lucide-react";
-
-const PILLARS = [
-  {
-    icon: Clock,
-    title: "72-Hour Rapid Installation",
-    description: "Guaranteed swift engineering from blueprint to activation. Our streamlined process ensures minimal disruption to your lifestyle or operations.",
-    color: "from-blue-500 to-cyan-400",
-  },
-  {
-    icon: Zap,
-    title: "Ultra-High Efficiency Panels",
-    description: "Next-gen photovoltaic tech yielding 24%+ more energy footprint than standard market panels, maximizing your roof's potential.",
-    color: "from-amber to-solar",
-  },
-  {
-    icon: Building2,
-    title: "Commercial & Residential Scaling",
-    description: "Tailored engineering architectures perfectly suited for sprawling premium estates and robust enterprise facilities alike.",
-    color: "from-rose to-purple-500",
-  }
-];
+import { Zap, Clock, ShieldCheck } from "lucide-react";
+import { useI18n } from "@/context/I18nContext";
 
 export default function ValueProps() {
+  const { t } = useI18n();
+
+  const PILLARS = [
+    {
+      icon: Zap,
+      title: t("vp1Title"),
+      description: t("vp1Desc"),
+      color: "from-amber to-yellow-600",
+    },
+    {
+      icon: Clock,
+      title: t("vp2Title"),
+      description: t("vp2Desc"),
+      color: "from-blue-500 to-cyan-400",
+    },
+    {
+      icon: ShieldCheck,
+      title: t("vp3Title"),
+      description: t("vp3Desc"),
+      color: "from-rose to-purple-500",
+    }
+  ];
+
   return (
     <section id="services" className="py-32 relative bg-obsidian overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 relative z-10">

@@ -2,11 +2,13 @@
 
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
-import { Activity, DollarSign, Leaf } from "lucide-react";
+import { Activity, DollarSign, Leaf, Factory } from "lucide-react";
 import { useAdminConfig } from "@/context/AdminConfigContext";
+import { useI18n } from "@/context/I18nContext";
 
 export default function DashboardDemo() {
   const { config } = useAdminConfig();
+  const { t } = useI18n();
   const [profile, setProfile] = useState<"home" | "warehouse">("home");
   const [dataPoints, setDataPoints] = useState<number[]>([]);
 
@@ -49,13 +51,18 @@ export default function DashboardDemo() {
     }, "");
   };
 
+  const metrics = {
+    savedToday: profile === "home" ? config.dashboard.homeMultiplier : config.dashboard.warehouseMultiplier,
+    co2Offset: profile === "home" ? config.dashboard.co2Home : config.dashboard.co2Warehouse
+  };
+
   return (
     <section id="dashboard" className="py-24 bg-obsidian">
       <div className="max-w-7xl mx-auto px-6">
         <div className="mb-12 flex flex-col md:flex-row justify-between items-end gap-6">
           <div>
-            <h2 className="font-outfit text-4xl font-bold text-white mb-2">Live Production Feed</h2>
-            <p className="text-slate-400">Monitor your energy yield in absolute real-time.</p>
+            <h2 className="font-outfit text-4xl font-bold text-white mb-2">{t("dashTitle")}</h2>
+            <p className="text-slate-400">{t("dashSub")}</p>
           </div>
           <div className="flex bg-white/5 p-1 rounded-lg">
             <button
@@ -64,7 +71,7 @@ export default function DashboardDemo() {
                 profile === "home" ? "bg-white/10 text-white" : "text-slate-400 hover:text-white"
               }`}
             >
-              Sleek Modern Home
+              {t("homeSim")}
             </button>
             <button
               onClick={() => setProfile("warehouse")}
@@ -72,7 +79,7 @@ export default function DashboardDemo() {
                 profile === "warehouse" ? "bg-white/10 text-white" : "text-slate-400 hover:text-white"
               }`}
             >
-              Industrial Warehouse
+              {t("warehouseSim")}
             </button>
           </div>
         </div>
@@ -126,20 +133,20 @@ export default function DashboardDemo() {
             <div className="glass-panel p-6 rounded-2xl flex-1 flex flex-col justify-center">
               <div className="flex items-center gap-3 mb-2 text-slate-400">
                 <Leaf size={18} className="text-green-400" />
-                <span className="text-sm font-medium">CO2 Offset Tons</span>
+                <span className="text-sm font-medium">{t("co2Offset")} ({t("tons")})</span>
               </div>
               <div className="text-3xl font-outfit font-bold text-white">
-                {profile === "home" ? config.dashboard.co2Home : config.dashboard.co2Warehouse}
+                {metrics.co2Offset.toFixed(1)}
               </div>
             </div>
 
             <div className="glass-panel p-6 rounded-2xl flex-1 flex flex-col justify-center bg-gradient-to-br from-white/5 to-amber/10 border-amber/20">
               <div className="flex items-center gap-3 mb-2 text-amber/80">
                 <DollarSign size={18} />
-                <span className="text-sm font-medium">Saved Today</span>
+                <span className="text-sm font-medium">{t("savedToday")}</span>
               </div>
               <div className="text-4xl font-outfit font-bold text-transparent bg-clip-text bg-gradient-to-r from-amber to-solar">
-                ₹{profile === "home" ? config.dashboard.homeMultiplier.toFixed(2) : config.dashboard.warehouseMultiplier.toFixed(2)}
+                ₹{metrics.savedToday.toFixed(2)}
               </div>
             </div>
           </div>

@@ -1,12 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { CheckCircle2, ArrowRight, Camera } from "lucide-react";
+import { Camera, Send, CheckCircle2 } from "lucide-react";
 import { motion } from "framer-motion";
 import { useAdminConfig } from "@/context/AdminConfigContext";
+import { useI18n } from "@/context/I18nContext";
 
 export default function Footer() {
   const { config } = useAdminConfig();
+  const { t } = useI18n();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
 
@@ -28,24 +30,24 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-16 mb-20 relative z-10">
         <div>
           <h2 className="font-outfit text-4xl md:text-5xl font-bold text-white mb-6">
-            Ready to harness the sun?
+            {t("readyToHarness")}
           </h2>
           <p className="text-slate-400 text-lg mb-8 max-w-md">
-            Reach out to our engineering team today to schedule your site assessment and secure your 72-hour installation window.
+            {t("reachOut")}
           </p>
           
           <div className="flex gap-4 mb-12">
-            <a href={config.socials.x} target="_blank" rel="noopener noreferrer" className="w-12 h-12 rounded-full glass-panel flex items-center justify-center text-white hover:bg-white/10 transition-colors cursor-pointer">
+            <a href={config.socials.x} aria-label="Follow us on X" target="_blank" rel="noopener noreferrer" className="w-12 h-12 rounded-full glass-panel flex items-center justify-center text-white hover:bg-white/10 transition-colors cursor-pointer">
               X
             </a>
-            <a href={config.socials.linkedin} target="_blank" rel="noopener noreferrer" className="w-12 h-12 rounded-full glass-panel flex items-center justify-center text-white hover:bg-white/10 transition-colors cursor-pointer">
+            <a href={config.socials.linkedin} aria-label="Follow us on LinkedIn" target="_blank" rel="noopener noreferrer" className="w-12 h-12 rounded-full glass-panel flex items-center justify-center text-white hover:bg-white/10 transition-colors cursor-pointer">
               in
             </a>
-            <a href={config.socials.facebook} target="_blank" rel="noopener noreferrer" className="w-12 h-12 rounded-full glass-panel flex items-center justify-center text-white hover:bg-white/10 transition-colors cursor-pointer">
+            <a href={config.socials.facebook} aria-label="Follow us on Facebook" target="_blank" rel="noopener noreferrer" className="w-12 h-12 rounded-full glass-panel flex items-center justify-center text-white hover:bg-white/10 transition-colors cursor-pointer">
               f
             </a>
-            <a href={config.socials.instagram} target="_blank" rel="noopener noreferrer" className="w-12 h-12 rounded-full glass-panel flex items-center justify-center text-white hover:bg-white/10 transition-colors cursor-pointer">
-              <Camera size={18} />
+            <a href={config.socials.instagram} aria-label="Follow us on Instagram" target="_blank" rel="noopener noreferrer" className="w-12 h-12 rounded-full glass-panel flex items-center justify-center text-white hover:bg-white/10 transition-colors cursor-pointer">
+              <Camera size={18} aria-hidden="true" />
             </a>
           </div>
         </div>
@@ -56,37 +58,39 @@ export default function Footer() {
           {isSuccess ? (
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="h-full flex flex-col items-center justify-center text-center py-12">
               <CheckCircle2 size={56} className="text-green-400 mb-6" />
-              <h3 className="font-outfit text-2xl font-bold text-white mb-2">Message Sent Successfully</h3>
-              <p className="text-slate-400">Our engineering consultants will review your details and contact you within 2 hours.</p>
+              <h3 className="font-outfit text-2xl font-bold text-white mb-2">{t("msgSent")}</h3>
+              <p className="text-slate-400 text-center">{t("msgSentSub")}</p>
             </motion.div>
           ) : (
             <form onSubmit={handleSubmit} className="flex flex-col gap-5 relative z-10">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div>
-                  <label className="block text-xs font-medium text-slate-400 uppercase tracking-wider mb-2">First Name</label>
-                  <input required type="text" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-rose focus:ring-1 focus:ring-rose transition-all" />
+                  <label htmlFor="first-name" className="block text-xs font-medium text-slate-400 uppercase tracking-wider mb-2">{t("firstName")}</label>
+                  <input id="first-name" required type="text" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-rose focus:ring-1 focus:ring-rose transition-all" />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-slate-400 uppercase tracking-wider mb-2">Last Name</label>
-                  <input required type="text" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-rose focus:ring-1 focus:ring-rose transition-all" />
+                  <label htmlFor="last-name" className="block text-xs font-medium text-slate-400 uppercase tracking-wider mb-2">{t("lastName")}</label>
+                  <input id="last-name" required type="text" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-rose focus:ring-1 focus:ring-rose transition-all" />
                 </div>
               </div>
               
               <div>
-                <label className="block text-xs font-medium text-slate-400 uppercase tracking-wider mb-2">Email Address</label>
-                <input required type="email" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-rose focus:ring-1 focus:ring-rose transition-all" />
+                <label htmlFor="email" className="block text-xs font-medium text-slate-400 uppercase tracking-wider mb-2">{t("emailAddr")}</label>
+                <input id="email" required type="email" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-rose focus:ring-1 focus:ring-rose transition-all" />
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-slate-400 uppercase tracking-wider mb-2">Message / Property Details</label>
-                <textarea required rows={4} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-rose focus:ring-1 focus:ring-rose transition-all resize-none" />
+                <label htmlFor="message" className="block text-xs font-medium text-slate-400 uppercase tracking-wider mb-2">{t("messageDetails")}</label>
+                <textarea id="message" required rows={4} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-rose focus:ring-1 focus:ring-rose transition-all resize-none" />
               </div>
 
               <button type="submit" disabled={isSubmitting} className="group flex items-center justify-center gap-2 w-full py-4 bg-white text-obsidian font-bold rounded-xl hover:bg-slate-200 transition-colors mt-2 h-14">
                 {isSubmitting ? (
                   <div className="w-6 h-6 border-2 border-obsidian border-t-transparent rounded-full animate-spin" />
                 ) : (
-                  <>Submit Request <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" /></>
+                  <>
+                    {t("submitReq")} <Send size={18} className="group-hover:translate-x-1 transition-transform" />
+                  </>
                 )}
               </button>
             </form>

@@ -4,16 +4,20 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
 import { IntroState } from "@/app/page";
+import { useI18n } from "@/context/I18nContext";
 
-const NAV_LINKS = [
-  { name: "Services", href: "#services" },
-  { name: "Savings Calculator", href: "#calculator" },
-  { name: "Dashboard Demo", href: "#dashboard" },
-  { name: "Contact", href: "#contact" },
-];
+
 
 export default function Header({ introState = "finished" }: { introState?: IntroState }) {
   const [isOpen, setIsOpen] = useState(false);
+  const { t, language, setLanguage } = useI18n();
+
+  const NAV_LINKS = [
+    { name: t("navServices"), href: "#services" },
+    { name: t("navCalculator"), href: "#calculator" },
+    { name: t("navDashboard"), href: "#dashboard" },
+    { name: t("navContact"), href: "#contact" },
+  ];
 
   return (
     <AnimatePresence>
@@ -47,14 +51,23 @@ export default function Header({ introState = "finished" }: { introState?: Intro
             href="#contact"
             className="px-6 py-2.5 rounded-full bg-gradient-to-r from-solar to-amber text-obsidian font-semibold text-sm hover:shadow-[0_0_20px_rgba(255,96,0,0.4)] transition-all transform hover:scale-105"
           >
-            Get Free Quote
+            {t("getQuote")}
           </a>
+          <button
+            onClick={() => setLanguage(language === "en" ? "hi" : "en")}
+            className="px-3 py-1 rounded border border-white/20 text-xs font-bold hover:bg-white/10 transition-colors uppercase"
+            aria-label="Toggle language"
+          >
+            {language}
+          </button>
         </nav>
 
         {/* Mobile Toggle */}
         <button
           className="md:hidden text-white p-2"
           onClick={() => setIsOpen(!isOpen)}
+          aria-label={isOpen ? "Close mobile menu" : "Open mobile menu"}
+          aria-expanded={isOpen}
         >
           {isOpen ? <X size={24} /> : <Menu size={24} />}
         </button>

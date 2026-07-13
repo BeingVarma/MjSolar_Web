@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAdminConfig } from "@/context/AdminConfigContext";
+import { useI18n } from "@/context/I18nContext";
 import { CheckCircle2, Save, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 
@@ -10,6 +11,7 @@ export default function AdminPage() {
   const [password, setPassword] = useState("");
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [error, setError] = useState(false);
+  const { t } = useI18n();
 
   const { config, updateConfig } = useAdminConfig();
   const [localConfig, setLocalConfig] = useState(config);
@@ -19,7 +21,10 @@ export default function AdminPage() {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    if (password === "mjsolar2026") {
+    // Sanitize input: allow only alphanumeric characters, max 20 chars
+    const sanitizedPassword = password.replace(/[^a-zA-Z0-9]/g, '').slice(0, 20);
+    
+    if (sanitizedPassword === "mjsolar2026") {
       setIsAuthenticated(true);
       setError(false);
     } else {
@@ -44,8 +49,8 @@ export default function AdminPage() {
           className="glass-panel p-8 md:p-12 rounded-[2rem] w-full max-w-md relative z-10 border-rose/30"
         >
           <div className="text-center mb-8">
-            <h1 className="font-outfit text-3xl font-bold text-white mb-2">Admin Portal</h1>
-            <p className="text-slate-400">Secure access required.</p>
+            <h1 className="font-outfit text-3xl font-bold text-white mb-2">{t("adminPortal")}</h1>
+            <p className="text-slate-400">{t("adminSub")}</p>
           </div>
 
           <form onSubmit={handleLogin} className="flex flex-col gap-6">
@@ -54,20 +59,21 @@ export default function AdminPage() {
                 type="password"
                 placeholder="Enter admin password"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                maxLength={20}
+                onChange={(e) => setPassword(e.target.value.replace(/[^a-zA-Z0-9]/g, ''))}
                 className={`w-full bg-white/5 border ${error ? 'border-red-500' : 'border-white/10'} rounded-xl px-4 py-3 text-white focus:outline-none focus:border-rose focus:ring-1 focus:ring-rose transition-all`}
               />
               {error && <p className="text-red-400 text-xs mt-2">Incorrect password. Try again.</p>}
             </div>
             
             <button type="submit" className="w-full py-3 bg-gradient-to-r from-solar to-amber rounded-xl text-obsidian font-bold hover:shadow-[0_0_20px_rgba(255,96,0,0.4)] transition-all">
-              Authenticate
+              {t("authBtn")}
             </button>
           </form>
 
           <div className="mt-8 text-center">
             <Link href="/" className="text-slate-500 hover:text-white transition-colors text-sm flex items-center justify-center gap-2">
-              <ArrowLeft size={14} /> Return to Main Site
+              <ArrowLeft size={14} /> {t("liveSite")}
             </Link>
           </div>
         </motion.div>
@@ -82,11 +88,11 @@ export default function AdminPage() {
       <div className="max-w-4xl mx-auto relative z-10">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-6">
           <div>
-            <h1 className="font-outfit text-4xl font-bold text-white mb-2">Control Panel</h1>
-            <p className="text-slate-400">Manage real-time frontend parameters globally.</p>
+            <h1 className="font-outfit text-4xl font-bold text-white mb-2">{t("ctrlPanel")}</h1>
+            <p className="text-slate-400">{t("ctrlSub")}</p>
           </div>
           <Link href="/" className="px-6 py-2 rounded-full border border-white/20 hover:bg-white/10 transition-colors text-white font-medium flex items-center gap-2">
-            <ArrowLeft size={16} /> Live Site
+            <ArrowLeft size={16} /> {t("liveSite")}
           </Link>
         </div>
 
@@ -221,7 +227,7 @@ export default function AdminPage() {
                 onClick={handleSave}
                 className="flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-solar to-amber text-obsidian rounded-xl font-bold hover:scale-105 transition-transform"
               >
-                <Save size={18} /> Publish Changes
+                <Save size={18} /> {t("publish")}
               </button>
             </div>
           </div>
