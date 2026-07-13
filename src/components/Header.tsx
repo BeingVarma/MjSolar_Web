@@ -3,6 +3,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
+import Image from "next/image";
 import { IntroState } from "@/app/[lang]/ClientPage";
 import { useI18n } from "@/context/I18nContext";
 
@@ -33,9 +34,13 @@ export default function Header({ introState = "finished" }: { introState?: Intro
               onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
               className="flex items-center gap-2 text-2xl font-outfit font-bold tracking-tight hover:opacity-80 transition-opacity cursor-pointer"
             >
-              <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-solar to-amber flex items-center justify-center text-obsidian shadow-[0_0_15px_rgba(255,158,0,0.5)]">
-                M
-              </div>
+              <Image 
+                src="/icon.png" 
+                alt="MjSolar Logo" 
+                width={32} 
+                height={32} 
+                className="w-8 h-8 object-contain rounded-md"
+              />
               <span className="text-white">MjSolar</span>
             </button>
 

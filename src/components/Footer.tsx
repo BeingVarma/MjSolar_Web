@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Camera, Send, CheckCircle2 } from "lucide-react";
+import { Camera, Send, CheckCircle2, Phone, Mail, MapPin } from "lucide-react";
 import { motion } from "framer-motion";
 import { useAdminConfig } from "@/context/AdminConfigContext";
 import { useI18n } from "@/context/I18nContext";
@@ -34,9 +34,38 @@ export default function Footer() {
           <h2 className="font-outfit text-3xl md:text-4xl font-bold text-white mb-4">
             {t("readyToHarness")}
           </h2>
-          <p className="text-slate-400 text-base mb-6 max-w-md">
+          <p className="text-slate-400 text-base mb-8 max-w-md">
             {t("reachOut")}
           </p>
+
+          <div className="flex flex-col gap-6 mb-12">
+            <a href="tel:+918688749050" aria-label="Call us at +91 86887 49050" className="flex items-center gap-4 text-slate-300 hover:text-white transition-colors group">
+              <div className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center group-hover:bg-solar/20 group-hover:border-solar/30 transition-all">
+                <Phone size={18} className="text-solar group-hover:scale-110 transition-transform" aria-hidden="true" />
+              </div>
+              <span className="font-medium">+91 86887 49050</span>
+            </a>
+            
+            <a href="mailto:salesmjsolar@gmail.com" aria-label="Email us at salesmjsolar@gmail.com" className="flex items-center gap-4 text-slate-300 hover:text-white transition-colors group">
+              <div className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center group-hover:bg-solar/20 group-hover:border-solar/30 transition-all">
+                <Mail size={18} className="text-solar group-hover:scale-110 transition-transform" aria-hidden="true" />
+              </div>
+              <span className="font-medium">salesmjsolar@gmail.com</span>
+            </a>
+            
+            <div className="flex items-start gap-4 text-slate-300 group cursor-default">
+              <div className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center shrink-0 group-hover:bg-solar/20 group-hover:border-solar/30 transition-all mt-1">
+                <MapPin size={18} className="text-solar group-hover:scale-110 transition-transform" aria-hidden="true" />
+              </div>
+              <address className="not-italic text-sm leading-relaxed" aria-label="Office Address">
+                Gunapalem,<br />
+                Near Old Bus Stand,<br />
+                Srikakulam,<br />
+                Andhra Pradesh,<br />
+                India
+              </address>
+            </div>
+          </div>
           
           <div className="flex gap-4 mb-12">
             <a href={config.socials.x} aria-label="Follow us on X" target="_blank" rel="noopener noreferrer" className="w-12 h-12 rounded-full glass-panel flex items-center justify-center text-white hover:bg-white/10 transition-colors cursor-pointer">
