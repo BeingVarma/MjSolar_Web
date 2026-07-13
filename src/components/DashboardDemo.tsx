@@ -57,7 +57,7 @@ export default function DashboardDemo() {
   };
 
   return (
-    <section id="dashboard" className="py-24 bg-obsidian">
+    <section id="dashboard" className="py-20 bg-obsidian">
       <div className="max-w-7xl mx-auto px-6">
         <div className="mb-12 flex flex-col md:flex-row justify-between items-end gap-6">
           <div>

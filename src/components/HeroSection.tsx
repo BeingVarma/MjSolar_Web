@@ -107,20 +107,20 @@ export default function HeroSection({ introState = "finished", onIntroEnd }: { i
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 1.2, delay: 0.1, ease: "easeOut" }}
-                className="font-outfit text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight text-white mb-6 leading-[1.1]"
+                className="font-outfit text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-white mb-6 leading-[1.1]"
               >
-          {t("pureSolar")}
-          <br />
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber to-solar">
-            {t("engineered")}
-          </span>
-        </motion.h1>
+                {t("pureSolar")}
+                <br />
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber to-solar">
+                  {t("engineered")}
+                </span>
+              </motion.h1>
 
               <motion.p
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 1.2, delay: 0.2, ease: "easeOut" }}
-                className="max-w-2xl text-lg md:text-xl text-slate-300 font-inter mb-10"
+                className="max-w-2xl text-base md:text-lg text-slate-300 font-inter mb-8"
               >
                 {t("heroSub")}
               </motion.p>
@@ -133,17 +133,17 @@ export default function HeroSection({ introState = "finished", onIntroEnd }: { i
               >
                 <a
                   href="#calculator"
-                  className="group relative px-8 py-4 bg-gradient-to-r from-solar to-amber rounded-full text-obsidian font-bold text-lg overflow-hidden transition-all hover:scale-105 shadow-[0_0_30px_rgba(255,96,0,0.4)]"
+                  className="group relative px-6 py-3 bg-gradient-to-r from-solar to-amber rounded-full text-obsidian font-bold text-base overflow-hidden transition-all hover:scale-105 shadow-[0_0_30px_rgba(255,96,0,0.4)]"
                 >
                   <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-in-out" />
                   <span className="relative z-10">{t("calcSavings")}</span>
                 </a>
 
-                <button aria-label="Watch our installation process video" className="group flex items-center gap-3 px-6 py-4 rounded-full glass-panel hover:bg-white/10 transition-colors">
+                <button className="group flex items-center gap-3 text-slate-300 hover:text-white transition-colors">
                   <div className="w-10 h-10 rounded-full bg-white text-obsidian flex items-center justify-center group-hover:scale-110 transition-transform">
-                    <Play size={18} className="ml-1" aria-hidden="true" />
+                    <div className="w-0 h-0 border-t-[5px] border-t-transparent border-l-[8px] border-l-obsidian border-b-[5px] border-b-transparent ml-1" />
                   </div>
-                  <span className="font-semibold text-white">{t("watchProcess")}</span>
+                  <span className="font-semibold text-white text-sm">{t("watchProcess")}</span>
                 </button>
               </motion.div>
             </>

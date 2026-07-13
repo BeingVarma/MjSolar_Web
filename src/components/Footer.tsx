@@ -29,10 +29,10 @@ export default function Footer() {
 
       <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-16 mb-20 relative z-10">
         <div>
-          <h2 className="font-outfit text-4xl md:text-5xl font-bold text-white mb-6">
+          <h2 className="font-outfit text-3xl md:text-4xl font-bold text-white mb-4">
             {t("readyToHarness")}
           </h2>
-          <p className="text-slate-400 text-lg mb-8 max-w-md">
+          <p className="text-slate-400 text-base mb-6 max-w-md">
             {t("reachOut")}
           </p>
           
@@ -84,7 +84,7 @@ export default function Footer() {
                 <textarea id="message" required rows={4} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-rose focus:ring-1 focus:ring-rose transition-all resize-none" />
               </div>
 
-              <button type="submit" disabled={isSubmitting} className="group flex items-center justify-center gap-2 w-full py-4 bg-white text-obsidian font-bold rounded-xl hover:bg-slate-200 transition-colors mt-2 h-14">
+              <button type="submit" disabled={isSubmitting} className="group flex items-center justify-center gap-2 w-full py-3 bg-white text-obsidian font-bold rounded-xl hover:bg-slate-200 transition-colors mt-2 h-12">
                 {isSubmitting ? (
                   <div className="w-6 h-6 border-2 border-obsidian border-t-transparent rounded-full animate-spin" />
                 ) : (

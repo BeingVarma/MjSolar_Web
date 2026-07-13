@@ -35,12 +35,12 @@ export default function ValueProps() {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
-          className="text-center mb-20"
+          className="text-center mb-16"
         >
-          <h2 className="font-outfit text-4xl md:text-5xl font-bold text-white mb-6">
+          <h2 className="font-outfit text-3xl md:text-4xl font-bold text-white mb-4">
             The <span className="text-transparent bg-clip-text bg-gradient-to-r from-solar to-amber">MjSolar Standard</span>
           </h2>
-          <p className="text-slate-400 max-w-2xl mx-auto text-lg">
+          <p className="text-slate-400 max-w-2xl mx-auto text-base">
             Engineering excellence meets uncompromising speed. We deploy the world&apos;s most advanced solar architectures faster than anyone else.
           </p>
         </motion.div>
@@ -58,14 +58,14 @@ export default function ValueProps() {
             >
               <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full blur-2xl group-hover:bg-white/10 transition-colors" />
               
-              <div className={`w-14 h-14 rounded-2xl flex items-center justify-center bg-gradient-to-br ${pillar.color} mb-6 shadow-lg`}>
-                <pillar.icon size={28} className="text-white" />
+              <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mb-6 shadow-inner">
+                <pillar.icon size={24} className="text-white" />
               </div>
               
-              <h3 className="text-2xl font-outfit font-bold text-white mb-4">
+              <h3 className="text-xl font-outfit font-bold text-white mb-3">
                 {pillar.title}
               </h3>
-              <p className="text-slate-400 font-inter leading-relaxed">
+              <p className="text-slate-400 font-inter leading-relaxed text-sm">
                 {pillar.description}
               </p>
             </motion.div>

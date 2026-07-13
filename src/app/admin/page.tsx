@@ -241,6 +241,18 @@ export default function AdminPage() {
                         <label className="block text-xs font-medium text-slate-400 uppercase mb-2">Inverter Warranty (Years)</label>
                         <input type="number" value={localConfig.warranty.inverter} onChange={e => updateNestedConfig("warranty", "inverter", Number(e.target.value))} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-white focus:border-rose outline-none" />
                       </div>
+                      <div>
+                        <label className="block text-xs font-medium text-slate-400 uppercase mb-2">Maintenance Cost (₹/kW/Year)</label>
+                        <input type="number" value={localConfig.assumptions.maintenanceCostPerKwYear} onChange={e => updateNestedConfig("assumptions", "maintenanceCostPerKwYear", Number(e.target.value))} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-white focus:border-rose outline-none" />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-medium text-slate-400 uppercase mb-2">Inverter Replacement Year</label>
+                        <input type="number" value={localConfig.assumptions.inverterReplacementYear} onChange={e => updateNestedConfig("assumptions", "inverterReplacementYear", Number(e.target.value))} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-white focus:border-rose outline-none" />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-medium text-slate-400 uppercase mb-2">Inverter Replacement Cost (₹/kW)</label>
+                        <input type="number" value={localConfig.assumptions.inverterReplacementCostPerKw} onChange={e => updateNestedConfig("assumptions", "inverterReplacementCostPerKw", Number(e.target.value))} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-white focus:border-rose outline-none" />
+                      </div>
                     </div>
                   </div>
                 )}

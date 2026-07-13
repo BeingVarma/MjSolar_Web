@@ -24,6 +24,9 @@ export interface AdminConfig {
     generationPerKw: number; // units per kW per month
     degradationRate: number; // % loss per year
     inflationRate: number; // % electricity price increase per year
+    maintenanceCostPerKwYear: number; // ₹ per kW per year
+    inverterReplacementYear: number; // year
+    inverterReplacementCostPerKw: number; // ₹ per kW
   };
   subsidies: {
     subsidyPerKwRes: number; // ₹ per kW
@@ -71,6 +74,9 @@ const defaultConfig: AdminConfig = {
     generationPerKw: 120,
     degradationRate: 0.005,
     inflationRate: 0.05,
+    maintenanceCostPerKwYear: 500,
+    inverterReplacementYear: 10,
+    inverterReplacementCostPerKw: 10000,
   },
   subsidies: {
     subsidyPerKwRes: 15000, // Roughly standard residential subsidy up to 3kW
