@@ -2,9 +2,56 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { MessageSquare, X, Send, CheckCircle2 } from "lucide-react";
+import { X, Send, CheckCircle2 } from "lucide-react";
 import { IntroState } from "@/app/[lang]/ClientPage";
 import { useI18n } from "@/context/I18nContext";
+
+const SolarBotIcon = ({ className = "", size = 24 }: { className?: string; size?: number }) => (
+  <svg 
+    width={size}
+    height={size}
+    viewBox="0 0 100 100" 
+    className={className} 
+    aria-hidden="true"
+    fill="none" 
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    {/* Rotating Sun Rays */}
+    <motion.g 
+      animate={{ rotate: 360 }} 
+      transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
+      style={{ transformOrigin: "50px 50px" }}
+    >
+      {[...Array(8)].map((_, i) => (
+        <path
+          key={i}
+          d="M50 8 L50 20 M50 80 L50 92"
+          stroke="currentColor"
+          strokeWidth="8"
+          strokeLinecap="round"
+          transform={`rotate(${i * 45} 50 50)`}
+          className="opacity-90"
+        />
+      ))}
+    </motion.g>
+
+    {/* Robot Head / Sun Core */}
+    <circle cx="50" cy="50" r="24" fill="currentColor" />
+    
+    {/* Robot Eyes */}
+    <circle cx="41" cy="46" r="3.5" fill="#FFF" />
+    <circle cx="59" cy="46" r="3.5" fill="#FFF" />
+    
+    {/* Friendly Smile */}
+    <path 
+      d="M 42 56 Q 50 64 58 56" 
+      stroke="#FFF" 
+      strokeWidth="3.5" 
+      strokeLinecap="round" 
+      fill="none"
+    />
+  </svg>
+);
 
 export default function ChatbotOverlay({ introState = "finished" }: { introState?: IntroState }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -49,13 +96,15 @@ export default function ChatbotOverlay({ introState = "finished" }: { introState
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0, opacity: 0 }}
             onClick={() => setIsOpen(true)}
-            aria-label="Open support chat"
+            aria-label="Solar AI Assistant"
+            title="Solar AI Assistant"
             className="group relative flex items-center gap-3 bg-gradient-to-r from-solar to-amber p-4 rounded-full shadow-[0_0_20px_rgba(255,96,0,0.3)] hover:scale-105 transition-transform"
           >
+            <span className="sr-only">Solar AI Assistant</span>
             <div className="absolute right-full mr-4 bg-white text-obsidian px-4 py-2 rounded-2xl rounded-br-none text-sm font-medium whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none shadow-lg">
               {t("chatOpen")}
             </div>
-            <MessageSquare size={24} className="text-obsidian" aria-hidden="true" />
+            <SolarBotIcon size={26} className="text-obsidian" />
           </motion.button>
         )}
       </AnimatePresence>
