@@ -4,6 +4,13 @@ import { motion } from "framer-motion";
 import { CheckCircle2, ArrowRight } from "lucide-react";
 import Image from "next/image";
 import { useI18n } from "@/context/I18nContext";
+import OnGridImg from "@/images/On Grid.png";
+import OffGridImg from "@/images/Off Grid.png";
+import HybridGridImg from "@/images/Hybrid Grid.png";
+import SolarPumpImg from "@/images/Solar pump.png";
+import SolarWaterHeaterImg from "@/images/Solar Water Heater..png";
+import SolarStreetLightsImg from "@/images/Solar street lights.png";
+import SolarFencingImg from "@/images/Solar Fencing.png";
 
 export default function Services() {
   const { t } = useI18n();
@@ -13,21 +20,21 @@ export default function Services() {
       title: t("sys1Title"),
       desc: t("sys1Desc"),
       keys: [t("sys1Key1"), t("sys1Key2"), t("sys1Key3"), t("sys1Key4"), t("sys1Key5")],
-      img: "https://images.unsplash.com/photo-1509391366360-2e959784a276?q=80&w=800&auto=format&fit=crop",
+      img: OnGridImg,
       alt: "On-Grid Solar System Installation"
     },
     {
       title: t("sys2Title"),
       desc: t("sys2Desc"),
       keys: [t("sys2Key1"), t("sys2Key2"), t("sys2Key3"), t("sys2Key4"), t("sys2Key5")],
-      img: "https://images.unsplash.com/photo-1521618755572-156ae0cdd74d?q=80&w=800&auto=format&fit=crop",
+      img: OffGridImg,
       alt: "Off-Grid Solar System with Batteries"
     },
     {
       title: t("sys3Title"),
       desc: t("sys3Desc"),
       keys: [t("sys3Key1"), t("sys3Key2"), t("sys3Key3"), t("sys3Key4"), t("sys3Key5")],
-      img: "https://images.unsplash.com/photo-1613665813446-82a78c468a1d?q=80&w=800&auto=format&fit=crop",
+      img: HybridGridImg,
       alt: "Hybrid Solar System Installation"
     }
   ];
@@ -36,25 +43,25 @@ export default function Services() {
     {
       title: t("prod1Title"),
       desc: t("prod1Desc"),
-      img: "https://images.unsplash.com/photo-1466611653911-95081537e5b7?q=80&w=600&auto=format&fit=crop",
+      img: SolarPumpImg,
       alt: "Solar Water Pump System"
     },
     {
       title: t("prod2Title"),
       desc: t("prod2Desc"),
-      img: "https://images.unsplash.com/photo-1584278860047-22db9ff82bed?q=80&w=600&auto=format&fit=crop",
+      img: SolarWaterHeaterImg,
       alt: "Solar Water Heater on Roof"
     },
     {
       title: t("prod3Title"),
       desc: t("prod3Desc"),
-      img: "https://images.unsplash.com/photo-1572085313466-6710de8d7ba3?q=80&w=600&auto=format&fit=crop",
+      img: SolarStreetLightsImg,
       alt: "Solar Powered Street Light"
     },
     {
       title: t("prod4Title"),
       desc: t("prod4Desc"),
-      img: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=600&auto=format&fit=crop",
+      img: SolarFencingImg,
       alt: "Solar Fencing System"
     }
   ];
@@ -114,6 +121,7 @@ export default function Services() {
                     fill
                     sizes="(max-width: 768px) 100vw, 33vw"
                     className="object-cover transition-transform duration-700 group-hover:scale-110"
+                    placeholder="blur"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-obsidian/90 to-transparent" />
                 </div>
@@ -173,6 +181,7 @@ export default function Services() {
                     fill
                     sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 25vw"
                     className="object-cover transition-transform duration-700 group-hover:scale-110"
+                    placeholder="blur"
                   />
                 </div>
                 <h4 className="text-lg font-outfit font-bold text-white mb-2">
