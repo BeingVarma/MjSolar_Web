@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Send, CheckCircle2 } from "lucide-react";
+import TypewriterText from "./TypewriterText";
 import { IntroState } from "@/app/[lang]/ClientPage";
 import { useI18n } from "@/context/I18nContext";
 
@@ -58,6 +59,7 @@ export default function ChatbotOverlay({ introState = "finished" }: { introState
   const [step, setStep] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [isTypingDone, setIsTypingDone] = useState(false);
   const { t } = useI18n();
 
   // Form states
@@ -66,7 +68,15 @@ export default function ChatbotOverlay({ introState = "finished" }: { introState
   const [zipCode, setZipCode] = useState("");
   const [contactInfo, setContactInfo] = useState("");
 
-  const handleNext = () => setStep(s => s + 1);
+  const handleNext = () => {
+    setIsTypingDone(false);
+    setStep(s => s + 1);
+  };
+
+  const handleOpen = () => {
+    setIsTypingDone(false);
+    setIsOpen(true);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -77,6 +87,7 @@ export default function ChatbotOverlay({ introState = "finished" }: { introState
     await new Promise(resolve => setTimeout(resolve, 1500));
     
     setIsSubmitting(false);
+    setIsTypingDone(false);
     setIsSuccess(true);
   };
 
@@ -95,7 +106,7 @@ export default function ChatbotOverlay({ introState = "finished" }: { introState
             initial={{ scale: 0, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0, opacity: 0 }}
-            onClick={() => setIsOpen(true)}
+            onClick={handleOpen}
             aria-label="Solar AI Assistant"
             title="Solar AI Assistant"
             className="group relative flex items-center gap-3 bg-gradient-to-r from-solar to-amber p-4 rounded-full shadow-[0_0_20px_rgba(255,96,0,0.3)] hover:scale-105 transition-transform"
@@ -132,47 +143,57 @@ export default function ChatbotOverlay({ introState = "finished" }: { introState
                 <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex flex-col items-center justify-center text-center h-full py-8">
                   <CheckCircle2 size={48} className="text-green-400 mb-4" />
                   <h4 className="font-outfit font-bold text-white text-xl mb-2">{t("reqReceived")}</h4>
-                  <p className="text-slate-400 text-sm">{t("reqReceivedSub")}</p>
+                  <TypewriterText text={t("reqReceivedSub")} />
                 </motion.div>
               ) : (
                 <form onSubmit={handleSubmit} className="flex flex-col gap-4">
                   {step === 0 && (
                     <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }}>
-                      <p className="text-white text-sm mb-3">{t("chatQ1")}</p>
-                      <div className="flex flex-col gap-2">
-                        <button type="button" onClick={() => { setPropertyType("Residential"); handleNext(); }} className="text-left px-4 py-2 bg-white/5 hover:bg-white/10 rounded-lg text-sm text-white transition-colors border border-white/10">{t("resMode")}</button>
-                        <button type="button" onClick={() => { setPropertyType("Commercial"); handleNext(); }} className="text-left px-4 py-2 bg-white/5 hover:bg-white/10 rounded-lg text-sm text-white transition-colors border border-white/10">{t("comMode")}</button>
-                      </div>
+                      <TypewriterText text={t("chatQ1")} onComplete={() => setIsTypingDone(true)} />
+                      {isTypingDone && (
+                        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="flex flex-col gap-2">
+                          <button type="button" onClick={() => { setPropertyType("Residential"); handleNext(); }} className="text-left px-4 py-2 bg-white/5 hover:bg-white/10 rounded-lg text-sm text-white transition-colors border border-white/10">{t("resMode")}</button>
+                          <button type="button" onClick={() => { setPropertyType("Commercial"); handleNext(); }} className="text-left px-4 py-2 bg-white/5 hover:bg-white/10 rounded-lg text-sm text-white transition-colors border border-white/10">{t("comMode")}</button>
+                        </motion.div>
+                      )}
                     </motion.div>
                   )}
 
                   {step === 1 && (
                     <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }}>
-                      <p className="text-white text-sm mb-3">{t("chatQ2")}</p>
-                      <div className="flex gap-2">
-                        <input required type="number" aria-label="Average monthly bill" placeholder="e.g. 250" value={avgBill} onChange={e => setAvgBill(e.target.value)} className="flex-1 bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-amber text-sm transition-colors" />
-                        <button aria-label="Submit bill" type="button" onClick={handleNext} disabled={!avgBill} className="bg-amber text-obsidian px-3 rounded-lg hover:bg-solar transition-colors disabled:opacity-50"><Send size={16} aria-hidden="true" /></button>
-                      </div>
+                      <TypewriterText text={t("chatQ2")} onComplete={() => setIsTypingDone(true)} />
+                      {isTypingDone && (
+                        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="flex gap-2">
+                          <input required type="number" aria-label="Average monthly bill" placeholder="e.g. 250" value={avgBill} onChange={e => setAvgBill(e.target.value)} className="flex-1 bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-amber text-sm transition-colors" />
+                          <button aria-label="Submit bill" type="button" onClick={handleNext} disabled={!avgBill} className="bg-amber text-obsidian px-3 rounded-lg hover:bg-solar transition-colors disabled:opacity-50"><Send size={16} aria-hidden="true" /></button>
+                        </motion.div>
+                      )}
                     </motion.div>
                   )}
 
                   {step === 2 && (
                     <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }}>
-                      <p className="text-white text-sm mb-3">{t("chatQ3")}</p>
-                      <div className="flex gap-2">
-                        <input required type="text" aria-label="Zip code" placeholder="Enter Zip" value={zipCode} onChange={e => setZipCode(e.target.value)} className="flex-1 bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-amber text-sm transition-colors" />
-                        <button aria-label="Submit zip code" type="button" onClick={handleNext} disabled={!zipCode} className="bg-amber text-obsidian px-3 rounded-lg hover:bg-solar transition-colors disabled:opacity-50"><Send size={16} aria-hidden="true" /></button>
-                      </div>
+                      <TypewriterText text={t("chatQ3")} onComplete={() => setIsTypingDone(true)} />
+                      {isTypingDone && (
+                        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="flex gap-2">
+                          <input required type="text" aria-label="Zip code" placeholder="Enter Zip" value={zipCode} onChange={e => setZipCode(e.target.value)} className="flex-1 bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-amber text-sm transition-colors" />
+                          <button aria-label="Submit zip code" type="button" onClick={handleNext} disabled={!zipCode} className="bg-amber text-obsidian px-3 rounded-lg hover:bg-solar transition-colors disabled:opacity-50"><Send size={16} aria-hidden="true" /></button>
+                        </motion.div>
+                      )}
                     </motion.div>
                   )}
 
                   {step === 3 && (
                     <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }}>
-                      <p className="text-white text-sm mb-3">{t("chatQ4")}</p>
-                      <input aria-label="Contact information" required type="text" placeholder="Email or Phone Number" value={contactInfo} onChange={e => setContactInfo(e.target.value)} className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-amber text-sm transition-colors mb-2" />
-                      <button type="submit" disabled={!contactInfo || isSubmitting} className="w-full py-2 bg-gradient-to-r from-solar to-amber text-obsidian font-bold rounded-lg hover:shadow-[0_0_15px_rgba(255,158,0,0.4)] transition-all flex items-center justify-center h-10">
-                        {isSubmitting ? <div className="w-5 h-5 border-2 border-obsidian border-t-transparent rounded-full animate-spin" /> : t("getMyQuote")}
-                      </button>
+                      <TypewriterText text={t("chatQ4")} onComplete={() => setIsTypingDone(true)} />
+                      {isTypingDone && (
+                        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="flex flex-col gap-2">
+                          <input aria-label="Contact information" required type="text" placeholder="Email or Phone Number" value={contactInfo} onChange={e => setContactInfo(e.target.value)} className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-amber text-sm transition-colors" />
+                          <button type="submit" disabled={!contactInfo || isSubmitting} className="w-full py-2 bg-gradient-to-r from-solar to-amber text-obsidian font-bold rounded-lg hover:shadow-[0_0_15px_rgba(255,158,0,0.4)] transition-all flex items-center justify-center h-10 mt-2">
+                            {isSubmitting ? <div className="w-5 h-5 border-2 border-obsidian border-t-transparent rounded-full animate-spin" /> : t("getMyQuote")}
+                          </button>
+                        </motion.div>
+                      )}
                     </motion.div>
                   )}
                 </form>
