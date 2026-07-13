@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
-import { Activity, DollarSign, Leaf, Factory } from "lucide-react";
+import { Activity, DollarSign, Leaf } from "lucide-react";
 import { useAdminConfig } from "@/context/AdminConfigContext";
 import { useI18n } from "@/context/I18nContext";
 

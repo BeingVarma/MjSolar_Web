@@ -1,12 +1,12 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAdminConfig } from "@/context/AdminConfigContext";
 import { useI18n } from "@/context/I18nContext";
 import { 
-  Building2, Home, SunMedium, TrendingUp, ChevronRight, 
-  Leaf, Zap, Factory, Battery, IndianRupee 
+  Building2, Home, TrendingUp, 
+  Leaf, Zap, Factory, Battery 
 } from "lucide-react";
 import { 
   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine 
@@ -90,7 +90,7 @@ export default function RoiCalculator() {
     let currentGen = monthlyGen * 12;
     
     for (let i = 1; i <= 25; i++) {
-      let yearlyUnits = monthlyUnits * 12;
+      const yearlyUnits = monthlyUnits * 12;
       let yearlyBill = 0;
       let yearlyExport = 0;
       
@@ -120,7 +120,8 @@ export default function RoiCalculator() {
   };
 
   const activeMetrics = calculateSystemMetrics(activeKw);
-  const recommendedMetrics = calculateSystemMetrics(recommendedKw);
+  // Used activeMetrics below
+  // const recommendedMetrics = calculateSystemMetrics(recommendedKw);
 
   // Comparison Options
   const comparisonKws = [
@@ -138,7 +139,7 @@ export default function RoiCalculator() {
 
   // Generate Chart Data
   const chartData = useMemo(() => {
-    let data = [];
+    const data = [];
     let cumulative = -activeMetrics.cost;
     let currentTariff = tariff;
     let currentGen = activeMetrics.monthlyGen * 12;
@@ -247,13 +248,13 @@ export default function RoiCalculator() {
                   <label className="block text-slate-300 text-sm font-medium mb-2">{t("roofType")}</label>
                   <div className="grid grid-cols-2 gap-2">
                     {["roofRcc", "roofMetal", "roofTile", "roofOther"].map(r => (
-                      <button 
-                        key={r} 
-                        onClick={() => setRoofType(r)}
-                        className={`py-2 rounded-lg text-xs font-medium transition-colors border ${roofType === r ? 'bg-amber/20 border-amber text-amber' : 'bg-white/5 border-white/10 text-slate-400 hover:text-white'}`}
-                      >
-                        {t(r as any)}
-                      </button>
+                        <button 
+                          key={r} 
+                          onClick={() => setRoofType(r)}
+                          className={`py-2 rounded-lg text-xs font-medium transition-colors border ${roofType === r ? 'bg-amber/20 border-amber text-amber' : 'bg-white/5 border-white/10 text-slate-400 hover:text-white'}`}
+                        >
+                          {t(r as keyof typeof t)}
+                        </button>
                     ))}
                   </div>
                 </div>
@@ -375,7 +376,7 @@ export default function RoiCalculator() {
                     />
                     <Tooltip 
                       contentStyle={{ backgroundColor: '#0f1115', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', color: '#fff', fontSize: '12px' }}
-                      formatter={(val: any) => [formatCurrency(Number(val)), t("monthlyCashFlow" as any)]}
+                      formatter={(val) => [formatCurrency(Number(val)), t("monthlyCashFlow" as keyof typeof t)]}
                       labelFormatter={(label) => `Year ${label}`}
                     />
                     <ReferenceLine y={0} stroke="#ff6000" strokeDasharray="3 3" />

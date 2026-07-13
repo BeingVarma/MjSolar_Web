@@ -118,7 +118,7 @@ export default function AdminPage() {
             {TABS.map((tab) => (
               <button
                 key={tab.id}
-                onClick={() => setActiveTab(tab.id as any)}
+                onClick={() => setActiveTab(tab.id as typeof activeTab)}
                 className={`px-8 py-4 font-medium uppercase tracking-wider text-sm transition-colors whitespace-nowrap ${
                   activeTab === tab.id ? "bg-white/10 text-white border-b-2 border-solar" : "text-slate-500 hover:text-slate-300 hover:bg-white/5"
                 }`}
@@ -150,7 +150,7 @@ export default function AdminPage() {
                       ].map(f => (
                         <div key={f.key}>
                           <label className="block text-xs font-medium text-slate-400 uppercase mb-2">{f.label}</label>
-                          <input type="number" value={(localConfig.roi as any)[f.key]} onChange={e => updateNestedConfig("roi", f.key, Number(e.target.value))} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-white focus:border-rose outline-none" />
+                          <input type="number" value={(localConfig.roi as Record<string, number>)[f.key]} onChange={e => updateNestedConfig("roi", f.key, Number(e.target.value))} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-white focus:border-rose outline-none" />
                         </div>
                       ))}
                     </div>
@@ -164,7 +164,7 @@ export default function AdminPage() {
                       ].map(f => (
                         <div key={f.key}>
                           <label className="block text-xs font-medium text-slate-400 uppercase mb-2">{f.label}</label>
-                          <input type="number" value={(localConfig.roi as any)[f.key]} onChange={e => updateNestedConfig("roi", f.key, Number(e.target.value))} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-white focus:border-rose outline-none" />
+                          <input type="number" value={(localConfig.roi as Record<string, number>)[f.key]} onChange={e => updateNestedConfig("roi", f.key, Number(e.target.value))} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-white focus:border-rose outline-none" />
                         </div>
                       ))}
                     </div>

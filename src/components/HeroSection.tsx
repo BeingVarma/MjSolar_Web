@@ -1,14 +1,16 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { Play, Volume2, VolumeX } from "lucide-react";
+import { Volume2, VolumeX } from "lucide-react";
 import { useRef, useEffect, useState } from "react";
 import { IntroState } from "@/app/page";
 import { useI18n } from "@/context/I18nContext";
+import GalleryModal from "./GalleryModal";
 
 export default function HeroSection({ introState = "finished", onIntroEnd }: { introState?: IntroState, onIntroEnd?: () => void }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isMuted, setIsMuted] = useState(true);
+  const [isGalleryOpen, setIsGalleryOpen] = useState(false);
   const { t } = useI18n();
 
   useEffect(() => {
@@ -139,7 +141,10 @@ export default function HeroSection({ introState = "finished", onIntroEnd }: { i
                   <span className="relative z-10">{t("calcSavings")}</span>
                 </a>
 
-                <button className="group flex items-center gap-3 text-slate-300 hover:text-white transition-colors">
+                <button 
+                  onClick={() => setIsGalleryOpen(true)}
+                  className="group flex items-center gap-3 text-slate-300 hover:text-white transition-colors"
+                >
                   <div className="w-10 h-10 rounded-full bg-white text-obsidian flex items-center justify-center group-hover:scale-110 transition-transform">
                     <div className="w-0 h-0 border-t-[5px] border-t-transparent border-l-[8px] border-l-obsidian border-b-[5px] border-b-transparent ml-1" />
                   </div>
@@ -153,6 +158,9 @@ export default function HeroSection({ introState = "finished", onIntroEnd }: { i
 
       {/* Decorative gradient orb */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-solar/20 blur-[120px] rounded-full pointer-events-none z-10" />
+      
+      {/* Dynamic Cloudinary Gallery Modal */}
+      <GalleryModal isOpen={isGalleryOpen} onClose={() => setIsGalleryOpen(false)} />
     </section>
   );
 }
