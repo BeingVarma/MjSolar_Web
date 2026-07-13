@@ -3,13 +3,14 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { Volume2, VolumeX } from "lucide-react";
 import { useRef, useEffect, useState } from "react";
-import { IntroState } from "@/app/page";
+import { IntroState } from "@/app/[lang]/ClientPage";
 import { useI18n } from "@/context/I18nContext";
 import GalleryModal from "./GalleryModal";
 
 export default function HeroSection({ introState = "finished", onIntroEnd }: { introState?: IntroState, onIntroEnd?: () => void }) {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [isMuted, setIsMuted] = useState(true);
+  const [isMuted, setIsMuted] = useState(false);
+  const [needsTap, setNeedsTap] = useState(false);
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
   const { t } = useI18n();
 
@@ -18,7 +19,17 @@ export default function HeroSection({ introState = "finished", onIntroEnd }: { i
     if (!vid) return;
 
     if (introState === "playing") {
-      vid.play().catch((err) => console.warn("Autoplay prevented:", err));
+      vid.muted = false; // attempt sound
+      vid.play().catch((err) => {
+        if (err.name === 'NotAllowedError') {
+          vid.muted = true;
+          setIsMuted(true);
+          setNeedsTap(true);
+          vid.play().catch(e => console.warn("Autoplay entirely blocked:", e));
+        } else {
+          console.warn("Autoplay prevented:", err);
+        }
+      });
     } else if (introState === "finished") {
       vid.pause();
       const setLastFrame = () => {
@@ -54,6 +65,8 @@ export default function HeroSection({ introState = "finished", onIntroEnd }: { i
           muted={isMuted}
           playsInline
           preload="auto"
+          controlsList="nodownload nofullscreen noremoteplayback"
+          disablePictureInPicture={true}
           className="w-full h-full object-cover opacity-60"
           onTimeUpdate={(e) => {
             const vid = e.currentTarget;
@@ -72,6 +85,30 @@ export default function HeroSection({ introState = "finished", onIntroEnd }: { i
             type="video/mp4"
           />
         </video>
+        
+        {/* Tap to Unmute Overlay */}
+        <AnimatePresence>
+          {needsTap && introState === "playing" && (
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="absolute inset-0 z-40 flex items-center justify-center bg-black/20 cursor-pointer backdrop-blur-[2px]"
+              onClick={() => {
+                if (videoRef.current) {
+                  videoRef.current.muted = false;
+                  setIsMuted(false);
+                }
+                setNeedsTap(false);
+              }}
+            >
+              <div className="glass-panel px-6 py-3 rounded-full flex items-center gap-3 text-white animate-pulse shadow-[0_0_20px_rgba(255,255,255,0.2)] hover:bg-white/10 transition-colors">
+                <VolumeX size={20} />
+                <span className="font-semibold text-sm font-outfit tracking-wide">Tap to enable sound</span>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
         
         {/* Audio Toggle Button */}
         <AnimatePresence>

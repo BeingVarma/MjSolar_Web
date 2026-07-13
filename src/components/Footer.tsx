@@ -108,8 +108,10 @@ export default function Footer() {
           <a href="#" className="hover:text-white transition-colors">Terms of Service</a>
           <a href="#" className="hover:text-white transition-colors">Enterprise SLA</a>
         </div>
-        <div>
-          &copy; {new Date().getFullYear()} MjSolar Engineering Inc. All rights reserved.
+        <div className="flex flex-col md:flex-row items-center gap-2">
+          <span>&copy; {new Date().getFullYear()} MjSolar Engineering Inc. All rights reserved.</span>
+          <span className="hidden md:inline">•</span>
+          <span>Developed by <a href="https://shancom.in/" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors underline decoration-white/20 underline-offset-2">Shancom Solutions</a></span>
         </div>
       </div>
     </footer>

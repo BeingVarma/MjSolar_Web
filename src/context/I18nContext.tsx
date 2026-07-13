@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { translations, Language, TranslationKey } from "@/lib/translations";
+import { useParams, useRouter, usePathname } from 'next/navigation';
 
 type I18nContextType = {
   language: Language;
@@ -12,21 +13,42 @@ type I18nContextType = {
 const I18nContext = createContext<I18nContextType | undefined>(undefined);
 
 export function I18nProvider({ children }: { children: React.ReactNode }) {
-  const [language, setLanguageState] = useState<Language>("en");
+  const params = useParams();
+  const router = useRouter();
+  const pathname = usePathname();
+  
+  const langFromUrl = (params?.lang as Language) || "en";
+  const [language, setLanguageState] = useState<Language>(langFromUrl);
 
   useEffect(() => {
-    const savedLang = localStorage.getItem("language") as Language;
-    if (savedLang && (savedLang === "en" || savedLang === "hi" || savedLang === "te")) {
+    if (langFromUrl !== language && ['en', 'hi', 'te'].includes(langFromUrl)) {
       // eslint-disable-next-line react-hooks/set-state-in-effect
-      setLanguageState(savedLang);
-      document.documentElement.lang = savedLang;
+      setLanguageState(langFromUrl);
+      document.documentElement.lang = langFromUrl;
     }
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [langFromUrl]);
 
   const handleSetLanguage = (lang: Language) => {
     setLanguageState(lang);
     localStorage.setItem("language", lang);
     document.documentElement.lang = lang;
+    
+    if (pathname) {
+      if (pathname === '/') {
+        router.push(`/${lang}`);
+      } else {
+        const segments = pathname.split('/');
+        if (['en', 'hi', 'te'].includes(segments[1])) {
+          segments[1] = lang;
+          router.push(segments.join('/'));
+        } else {
+          router.push(`/${lang}${pathname}`);
+        }
+      }
+    } else {
+      router.push(`/${lang}`);
+    }
   };
 
   const t = (key: TranslationKey): string => {

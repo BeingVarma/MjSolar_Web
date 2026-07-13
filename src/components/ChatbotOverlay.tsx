@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { MessageSquare, X, Send, CheckCircle2 } from "lucide-react";
-import { IntroState } from "@/app/page";
+import { IntroState } from "@/app/[lang]/ClientPage";
 import { useI18n } from "@/context/I18nContext";
 
 export default function ChatbotOverlay({ introState = "finished" }: { introState?: IntroState }) {
