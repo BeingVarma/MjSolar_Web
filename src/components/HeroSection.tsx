@@ -180,12 +180,14 @@ export default function HeroSection({ introState = "finished", onIntroEnd }: { i
 
                 <button 
                   onClick={() => setIsGalleryOpen(true)}
+                  aria-label={t("watchProjects")}
+                  title={t("watchProjects")}
                   className="group flex items-center gap-3 text-slate-300 hover:text-white transition-colors"
                 >
                   <div className="w-10 h-10 rounded-full bg-white text-obsidian flex items-center justify-center group-hover:scale-110 transition-transform">
                     <div className="w-0 h-0 border-t-[5px] border-t-transparent border-l-[8px] border-l-obsidian border-b-[5px] border-b-transparent ml-1" />
                   </div>
-                  <span className="font-semibold text-white text-sm">{t("watchProcess")}</span>
+                  <span className="font-semibold text-white text-sm">{t("watchProjects")}</span>
                 </button>
               </motion.div>
             </>
