@@ -1,6 +1,10 @@
 export const translations = {
   en: {
+    navHome: "Home",
+    navAbout: "About",
     navStandards: "Our Standards",
+    navServices: "Our Services",
+    navPortfolio: "Portfolio",
     navCalculator: "Savings Calculator",
     navDashboard: "Dashboard Demo",
     navContact: "Contact",
@@ -154,7 +158,11 @@ export const translations = {
     kwh: "kWh/month"
   },
   hi: {
+    navHome: "होम",
+    navAbout: "हमारे बारे में",
     navStandards: "हमारे मानक",
+    navServices: "हमारी सेवाएं",
+    navPortfolio: "पोर्टफोलियो",
     navCalculator: "बचत कैलकुलेटर",
     navDashboard: "डैशबोर्ड डेमो",
     navContact: "संपर्क करें",
@@ -307,7 +315,11 @@ export const translations = {
     kwh: "kWh/माह"
   },
   te: {
+    navHome: "హోమ్",
+    navAbout: "మా గురించి",
     navStandards: "మా ప్రమాణాలు",
+    navServices: "మా సేవలు",
+    navPortfolio: "పోర్ట్‌ఫోలియో",
     navCalculator: "పొదుపు కాలిక్యులేటర్",
     navDashboard: "డ్యాష్‌బోర్డ్ డెమో",
     navContact: "సంప్రదించండి",

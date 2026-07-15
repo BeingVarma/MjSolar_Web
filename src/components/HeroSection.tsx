@@ -47,7 +47,7 @@ export default function HeroSection({ introState = "finished", onIntroEnd }: { i
   }, [introState]);
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Background Video */}
       <div className="absolute inset-0 w-full h-full z-0 bg-obsidian">
         <AnimatePresence>

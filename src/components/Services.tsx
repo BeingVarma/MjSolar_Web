@@ -67,7 +67,7 @@ export default function Services() {
   ];
 
   return (
-    <section className="py-32 relative bg-obsidian overflow-hidden">
+    <section id="services" className="py-32 relative bg-obsidian overflow-hidden">
       {/* Decorative Blur Elements matching OurStandards */}
       <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
       <div className="absolute -left-40 top-40 w-96 h-96 bg-solar/10 rounded-full blur-[100px] pointer-events-none" />
