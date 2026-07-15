@@ -1,7 +1,5 @@
 export const translations = {
   en: {
-    navHome: "Home",
-    navAbout: "About",
     navStandards: "Our Standards",
     navServices: "Our Services",
     navPortfolio: "Portfolio",
@@ -158,8 +156,6 @@ export const translations = {
     kwh: "kWh/month"
   },
   hi: {
-    navHome: "होम",
-    navAbout: "हमारे बारे में",
     navStandards: "हमारे मानक",
     navServices: "हमारी सेवाएं",
     navPortfolio: "पोर्टफोलियो",
@@ -315,8 +311,6 @@ export const translations = {
     kwh: "kWh/माह"
   },
   te: {
-    navHome: "హోమ్",
-    navAbout: "మా గురించి",
     navStandards: "మా ప్రమాణాలు",
     navServices: "మా సేవలు",
     navPortfolio: "పోర్ట్‌ఫోలియో",
