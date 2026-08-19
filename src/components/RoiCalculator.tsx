@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAdminConfig } from "@/context/AdminConfigContext";
 import { useI18n } from "@/context/I18nContext";
@@ -24,22 +24,23 @@ export default function RoiCalculator() {
   const [roofType, setRoofType] = useState("rcc");
   const [businessType, setBusinessType] = useState("manufacturing");
   const [operatingDays, setOperatingDays] = useState(30);
+  const [selectedKwOverride, setSelectedKwOverride] = useState<number | null>(null);
 
   const minBill = isCommercial ? config.roi.comMin : config.roi.resMin;
   const maxBill = isCommercial ? config.roi.comMax : config.roi.resMax;
   const step = isCommercial ? config.roi.comStep : config.roi.resStep;
 
   // Handle Mode Switch
-  const switchMode = (newMode: "res" | "com") => {
+  const switchMode = useCallback((newMode: "res" | "com") => {
     setMode(newMode);
     setBill(newMode === "com" ? config.roi.comDefault : config.roi.resDefault);
     setSelectedKwOverride(null);
-  };
+  }, [config.roi.comDefault, config.roi.resDefault]);
 
-  const handleBillChange = (val: number) => {
+  const handleBillChange = useCallback((val: number) => {
     setBill(val);
     setSelectedKwOverride(null);
-  }
+  }, []);
 
   // Calculations Logic
   const tariff = isCommercial ? config.assumptions.tariffCom : config.assumptions.tariffRes;
@@ -48,21 +49,21 @@ export default function RoiCalculator() {
   const exportTariff = config.assumptions.exportTariff;
 
   // Estimate monthly consumption in units (kWh)
-  const monthlyUnits = bill / tariff;
+  const monthlyUnits = useMemo(() => bill / tariff, [bill, tariff]);
   
   // Recommend System Size (kW) to offset 100% of bill
-  const rawRecommendedKw = monthlyUnits / genPerKw;
-  // Round to nearest 0.5 or 1 kW
-  const recommendedKw = Math.max(1, Math.ceil(rawRecommendedKw * 2) / 2);
+  const recommendedKw = useMemo(() => {
+    const rawRecommendedKw = monthlyUnits / genPerKw;
+    return Math.max(1, Math.ceil(rawRecommendedKw * 2) / 2);
+  }, [monthlyUnits, genPerKw]);
 
-  const [selectedKwOverride, setSelectedKwOverride] = useState<number | null>(null);
   const activeKw = selectedKwOverride || recommendedKw;
 
   // Subsidy Calculation (Simplified)
   const subsidyPerKw = isCommercial ? config.subsidies.subsidyPerKwCom : config.subsidies.subsidyPerKwRes;
   const maxSubsidyKw = isCommercial ? config.subsidies.maxSubsidyKwCom : config.subsidies.maxSubsidyKwRes;
 
-  const calculateSystemMetrics = (kw: number) => {
+  const calculateSystemMetrics = useCallback((kw: number) => {
     const eligibleSubsidyKw = Math.min(kw, maxSubsidyKw);
     const totalSubsidy = eligibleSubsidyKw * subsidyPerKw;
     const cost = (kw * costPerKw) - totalSubsidy;
@@ -117,25 +118,25 @@ export default function RoiCalculator() {
     }
 
     return { cost, monthlyGen, newBill, exportIncome, monthlySavings, annualSavings, payback, lifetimeSavings };
-  };
+  }, [maxSubsidyKw, subsidyPerKw, costPerKw, genPerKw, monthlyUnits, tariff, exportTariff, bill, config.assumptions]);
 
-  const activeMetrics = calculateSystemMetrics(activeKw);
-  // Used activeMetrics below
-  // const recommendedMetrics = calculateSystemMetrics(recommendedKw);
+  const activeMetrics = useMemo(() => calculateSystemMetrics(activeKw), [calculateSystemMetrics, activeKw]);
 
   // Comparison Options
-  const comparisonKws = [
-    recommendedKw,
-    Math.ceil(recommendedKw * 1.5),
-    Math.ceil(recommendedKw * 2),
-    Math.ceil(recommendedKw * 3)
-  ].filter((v, i, a) => a.indexOf(v) === i); // Unique
+  const comparisonKws = useMemo(() => {
+    return [
+      recommendedKw,
+      Math.ceil(recommendedKw * 1.5),
+      Math.ceil(recommendedKw * 2),
+      Math.ceil(recommendedKw * 3)
+    ].filter((v, i, a) => a.indexOf(v) === i); // Unique
+  }, [recommendedKw]);
 
-  const formatCurrency = (val: number) => {
+  const formatCurrency = useCallback((val: number) => {
     if (val >= 10000000) return `₹${(val / 10000000).toFixed(2)} Cr`;
     if (val >= 100000) return `₹${(val / 100000).toFixed(2)} Lakh`;
     return `₹${Math.round(val).toLocaleString('en-IN')}`;
-  };
+  }, []);
 
   // Generate Chart Data
   const chartData = useMemo(() => {
@@ -320,7 +321,7 @@ export default function RoiCalculator() {
                     <div className="font-outfit text-5xl font-bold text-white mb-1 flex items-baseline gap-2">
                       {activeKw} <span className="text-xl text-slate-400">{t("kw")}</span>
                     </div>
-                    <p className="text-slate-400 text-sm">{t("solarCapacity")}</p>
+                    <p className="text-slate-400 text-sm">{t("solarCapacity")} • {activeKw * 120}–{activeKw * 150} units/month</p>
                   </div>
                   <div className="text-left md:text-right">
                     <div className="text-2xl font-bold text-white mb-1">{formatCurrency(activeMetrics.cost)}</div>
@@ -433,9 +434,12 @@ export default function RoiCalculator() {
                       onClick={() => setSelectedKwOverride(kw)}
                       className={`min-w-[240px] cursor-pointer snap-center glass-panel p-5 rounded-3xl border transition-all ${isSelected ? 'border-amber shadow-[0_0_20px_rgba(255,191,0,0.2)] scale-[1.02]' : 'border-white/10 hover:border-white/30'}`}
                     >
-                      <div className="flex justify-between items-center mb-4">
-                        <span className="font-outfit text-xl font-bold text-white">{kw} {t("kw")}</span>
-                        {kw === recommendedKw && <span className="text-[10px] bg-amber/20 text-amber px-2 py-1 rounded-full uppercase tracking-wider font-bold">Rec</span>}
+                      <div className="flex justify-between items-start mb-4">
+                        <div className="flex flex-col">
+                          <span className="font-outfit text-xl font-bold text-white">{kw} {t("kw")}</span>
+                          <span className="text-[10px] text-slate-400 font-medium">{kw * 120}–{kw * 150} units/month</span>
+                        </div>
+                        {kw === recommendedKw && <span className="text-[10px] bg-amber/20 text-amber px-2 py-1 rounded-full uppercase tracking-wider font-bold mt-1">Rec</span>}
                       </div>
                       <div className="space-y-2 text-xs">
                         <div className="flex justify-between">
@@ -461,59 +465,6 @@ export default function RoiCalculator() {
                   );
                 })}
               </div>
-            </div>
-
-            {/* Average Monthly Solar Generation Info Section */}
-            <div className="glass-panel p-6 rounded-3xl border-white/10 space-y-4">
-              <div>
-                <h3 className="font-outfit text-lg font-bold text-white mb-1">
-                  Average Monthly Solar Generation
-                </h3>
-                <p className="text-slate-400 text-xs">
-                  Estimated electricity generation under standard Indian sunlight conditions.
-                </p>
-              </div>
-
-              <div className="overflow-x-auto w-full">
-                <table className="w-full text-left text-xs md:text-sm text-slate-300 border-collapse">
-                  <thead>
-                    <tr className="border-b border-white/10 text-[10px] md:text-[11px] uppercase tracking-wider text-slate-400 font-semibold">
-                      <th className="py-2.5 px-3 md:px-4">Solar System</th>
-                      <th className="py-2.5 px-3 md:px-4">Average Generation / Month</th>
-                      <th className="py-2.5 px-3 md:px-4">Approximate Price</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-white/5 font-medium">
-                    {[
-                      { capacity: "1 kW", generation: "120–150 units", price: "Custom Quote" },
-                      { capacity: "2 kW", generation: "240–300 units", price: "Custom Quote" },
-                      { capacity: "3 kW", generation: "360–450 units", price: "₹2,00,000 – ₹2,10,000" },
-                      { capacity: "4 kW", generation: "480–600 units", price: "₹2,60,000 – ₹2,65,000" },
-                      { capacity: "5 kW", generation: "600–750 units", price: "₹3,20,000 – ₹3,25,000" },
-                      { capacity: "6 kW", generation: "720–900 units", price: "Custom Quote" },
-                      { capacity: "7 kW", generation: "840–1,050 units", price: "Custom Quote" },
-                      { capacity: "8 kW", generation: "960–1,200 units", price: "Custom Quote" },
-                      { capacity: "9 kW", generation: "1,080–1,350 units", price: "Custom Quote" },
-                      { capacity: "10 kW", generation: "1,200–1,500 units", price: "Custom Quote" }
-                    ].map((row, idx) => (
-                      <tr 
-                        key={idx} 
-                        className="hover:bg-white/[0.02] transition-colors"
-                      >
-                        <td className="py-2 px-3 md:px-4 font-semibold text-white">{row.capacity}</td>
-                        <td className="py-2 px-3 md:px-4">{row.generation}</td>
-                        <td className={`py-2 px-3 md:px-4 ${row.price.startsWith("₹") ? "text-amber font-semibold" : "text-slate-500 font-normal"}`}>
-                          {row.price}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-
-              <p className="text-[10px] md:text-[11px] text-slate-500 leading-relaxed pt-2 border-t border-white/5">
-                <strong>Note:</strong> Average monthly generation is based on standard Indian sunlight conditions. Actual output may vary depending on location, roof orientation, shading, weather, and system performance.
-              </p>
             </div>
 
             {/* Disclaimer */}
