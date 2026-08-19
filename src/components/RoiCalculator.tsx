@@ -468,9 +468,14 @@ export default function RoiCalculator() {
             </div>
 
             {/* Disclaimer */}
-            <p className="text-center text-[11px] text-slate-500 max-w-2xl mx-auto pt-4 border-t border-white/5">
-              These estimates are based on configurable assumptions and typical operating conditions. Final system sizing and financial projections will be confirmed during the free site survey.
-            </p>
+            <div className="text-center text-[11px] text-slate-500 max-w-2xl mx-auto pt-4 border-t border-white/5 space-y-2">
+              <p>
+                These estimates are based on configurable assumptions and typical operating conditions. Final system sizing and financial projections will be confirmed during the free site survey.
+              </p>
+              <p>
+                <strong>Note:</strong> Average monthly generation is based on standard Indian sunlight conditions. Actual output may vary depending on location, roof orientation, shading, weather, and system performance.
+              </p>
+            </div>
 
           </div>
         </div>
