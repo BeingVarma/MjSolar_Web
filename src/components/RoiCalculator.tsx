@@ -463,6 +463,59 @@ export default function RoiCalculator() {
               </div>
             </div>
 
+            {/* Average Monthly Solar Generation Info Section */}
+            <div className="glass-panel p-6 rounded-3xl border-white/10 space-y-4">
+              <div>
+                <h3 className="font-outfit text-lg font-bold text-white mb-1">
+                  Average Monthly Solar Generation
+                </h3>
+                <p className="text-slate-400 text-xs">
+                  Estimated electricity generation under standard Indian sunlight conditions.
+                </p>
+              </div>
+
+              <div className="overflow-x-auto w-full">
+                <table className="w-full text-left text-xs md:text-sm text-slate-300 border-collapse">
+                  <thead>
+                    <tr className="border-b border-white/10 text-[10px] md:text-[11px] uppercase tracking-wider text-slate-400 font-semibold">
+                      <th className="py-2.5 px-3 md:px-4">Solar System</th>
+                      <th className="py-2.5 px-3 md:px-4">Average Generation / Month</th>
+                      <th className="py-2.5 px-3 md:px-4">Approximate Price</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-white/5 font-medium">
+                    {[
+                      { capacity: "1 kW", generation: "120–150 units", price: "Custom Quote" },
+                      { capacity: "2 kW", generation: "240–300 units", price: "Custom Quote" },
+                      { capacity: "3 kW", generation: "360–450 units", price: "₹2,00,000 – ₹2,10,000" },
+                      { capacity: "4 kW", generation: "480–600 units", price: "₹2,60,000 – ₹2,65,000" },
+                      { capacity: "5 kW", generation: "600–750 units", price: "₹3,20,000 – ₹3,25,000" },
+                      { capacity: "6 kW", generation: "720–900 units", price: "Custom Quote" },
+                      { capacity: "7 kW", generation: "840–1,050 units", price: "Custom Quote" },
+                      { capacity: "8 kW", generation: "960–1,200 units", price: "Custom Quote" },
+                      { capacity: "9 kW", generation: "1,080–1,350 units", price: "Custom Quote" },
+                      { capacity: "10 kW", generation: "1,200–1,500 units", price: "Custom Quote" }
+                    ].map((row, idx) => (
+                      <tr 
+                        key={idx} 
+                        className="hover:bg-white/[0.02] transition-colors"
+                      >
+                        <td className="py-2 px-3 md:px-4 font-semibold text-white">{row.capacity}</td>
+                        <td className="py-2 px-3 md:px-4">{row.generation}</td>
+                        <td className={`py-2 px-3 md:px-4 ${row.price.startsWith("₹") ? "text-amber font-semibold" : "text-slate-500 font-normal"}`}>
+                          {row.price}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              <p className="text-[10px] md:text-[11px] text-slate-500 leading-relaxed pt-2 border-t border-white/5">
+                <strong>Note:</strong> Average monthly generation is based on standard Indian sunlight conditions. Actual output may vary depending on location, roof orientation, shading, weather, and system performance.
+              </p>
+            </div>
+
             {/* Disclaimer */}
             <p className="text-center text-[11px] text-slate-500 max-w-2xl mx-auto pt-4 border-t border-white/5">
               These estimates are based on configurable assumptions and typical operating conditions. Final system sizing and financial projections will be confirmed during the free site survey.
