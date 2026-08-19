@@ -138,6 +138,16 @@ export default function RoiCalculator() {
     return `₹${Math.round(val).toLocaleString('en-IN')}`;
   }, []);
 
+  const handleGetQuoteClick = useCallback(() => {
+    const contactSection = document.getElementById("contact");
+    if (contactSection) {
+      contactSection.scrollIntoView({ behavior: "smooth" });
+    }
+    setTimeout(() => {
+      window.dispatchEvent(new CustomEvent("highlight-whatsapp"));
+    }, 450);
+  }, []);
+
   // Generate Chart Data
   const chartData = useMemo(() => {
     const data = [];
@@ -323,9 +333,13 @@ export default function RoiCalculator() {
                     </div>
                     <p className="text-slate-400 text-sm">{t("solarCapacity")} • {activeKw * 120}–{activeKw * 150} units/month</p>
                   </div>
-                  <div className="text-left md:text-right">
-                    <div className="text-2xl font-bold text-white mb-1">{formatCurrency(activeMetrics.cost)}</div>
-                    <p className="text-slate-400 text-[10px] uppercase tracking-wider">{t("netInvestment")}</p>
+                  <div className="shrink-0 w-full md:w-auto mt-2 md:mt-0">
+                    <button
+                      onClick={handleGetQuoteClick}
+                      className="px-6 py-2.5 rounded-full bg-gradient-to-r from-solar to-amber text-obsidian font-bold text-sm hover:shadow-[0_0_20px_rgba(255,96,0,0.4)] transition-all transform hover:scale-105 cursor-pointer w-full md:w-auto text-center"
+                    >
+                      Get Quote
+                    </button>
                   </div>
                 </div>
 
