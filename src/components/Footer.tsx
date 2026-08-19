@@ -20,7 +20,7 @@ export default function Footer() {
       setHighlightWhatsApp(true);
       setTimeout(() => {
         setHighlightWhatsApp(false);
-      }, 3000);
+      }, 10000);
     };
 
     window.addEventListener("highlight-whatsapp", handleHighlight);

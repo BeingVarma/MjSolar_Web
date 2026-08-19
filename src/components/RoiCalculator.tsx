@@ -139,13 +139,17 @@ export default function RoiCalculator() {
   }, []);
 
   const handleGetQuoteClick = useCallback(() => {
-    const contactSection = document.getElementById("contact");
-    if (contactSection) {
-      contactSection.scrollIntoView({ behavior: "smooth" });
+    const whatsappElement = document.getElementById("whatsapp-cta");
+    if (whatsappElement) {
+      whatsappElement.scrollIntoView({ 
+        behavior: "smooth",
+        block: "center",
+        inline: "nearest"
+      });
     }
     setTimeout(() => {
       window.dispatchEvent(new CustomEvent("highlight-whatsapp"));
-    }, 450);
+    }, 800);
   }, []);
 
   // Generate Chart Data
