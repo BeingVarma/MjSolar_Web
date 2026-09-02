@@ -163,25 +163,13 @@ export default function Footer() {
       </div>
 
       <div className="max-w-7xl mx-auto px-6 border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-6 text-sm text-slate-500">
-        <div className="flex flex-col md:flex-row items-center gap-2 order-3 md:order-1 font-medium">
-          <span className="text-slate-400">Developed by</span>
-          <a 
-            href="https://shancom.in/" 
-            target="_blank" 
-            rel="noopener noreferrer" 
-            className="text-slate-300 hover:text-solar transition-colors duration-300 relative group"
-          >
-            Shancom Solutions
-            <span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-solar transition-all duration-300 group-hover:w-full"></span>
-          </a>
+        <div className="flex items-center gap-2 order-2 md:order-1">
+          <span>&copy; {new Date().getFullYear()} MjSolar Engineering Inc. All rights reserved.</span>
         </div>
         <div className="flex gap-6 order-1 md:order-2">
           <button onClick={() => setActiveModal('privacy')} className="hover:text-white transition-colors">Privacy Policy</button>
           <button onClick={() => setActiveModal('terms')} className="hover:text-white transition-colors">Terms of Service</button>
           <button onClick={() => setActiveModal('sla')} className="hover:text-white transition-colors">Enterprise SLA</button>
-        </div>
-        <div className="flex items-center gap-2 order-2 md:order-3">
-          <span>&copy; {new Date().getFullYear()} MjSolar Engineering Inc. All rights reserved.</span>
         </div>
       </div>
 
