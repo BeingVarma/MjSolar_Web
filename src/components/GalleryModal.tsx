@@ -30,7 +30,7 @@ export default function GalleryModal({ isOpen, onClose }: GalleryModalProps) {
     setIsLoading(true);
     setError(false);
     try {
-      const res = await fetch("/api/gallery");
+      const res = await fetch("/api/gallery", { cache: "no-store" });
       if (!res.ok) throw new Error("Failed to fetch gallery");
       const data = await res.json();
       setImages(data.images || []);
@@ -44,12 +44,11 @@ export default function GalleryModal({ isOpen, onClose }: GalleryModalProps) {
 
   // Fetch images when modal opens
   useEffect(() => {
-    if (isOpen && images.length === 0 && !error) {
+    if (isOpen) {
       // eslint-disable-next-line react-hooks/set-state-in-effect
       fetchImages();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isOpen, error, fetchImages]);
+  }, [isOpen, fetchImages]);
 
   const handleNext = useCallback(() => {
     if (lightboxIndex !== null) {

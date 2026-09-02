@@ -6,6 +6,7 @@ import { useAdminConfig } from "@/context/AdminConfigContext";
 import { useI18n } from "@/context/I18nContext";
 import { CheckCircle2, Save, ArrowLeft } from "lucide-react";
 import Link from "next/link";
+import PortfolioManager from "@/components/PortfolioManager";
 
 export default function AdminPage() {
   const [password, setPassword] = useState("");
@@ -16,7 +17,7 @@ export default function AdminPage() {
   const { config, updateConfig } = useAdminConfig();
   const [localConfig, setLocalConfig] = useState(config);
   
-  const [activeTab, setActiveTab] = useState<"roi" | "pricing" | "assumptions" | "subsidies" | "dashboard" | "socials">("roi");
+  const [activeTab, setActiveTab] = useState<"roi" | "pricing" | "assumptions" | "subsidies" | "dashboard" | "socials" | "portfolio">("roi");
   const [showToast, setShowToast] = useState(false);
 
   const handleLogin = (e: React.FormEvent) => {
@@ -96,6 +97,7 @@ export default function AdminPage() {
     { id: "assumptions", label: "Assumptions" },
     { id: "dashboard", label: "Dashboard Metrics" },
     { id: "socials", label: "Social Links" },
+    { id: "portfolio", label: "Portfolio Manager" },
   ] as const;
 
   return (
@@ -308,17 +310,23 @@ export default function AdminPage() {
                     </div>
                   </div>
                 )}
+
+                {activeTab === "portfolio" && (
+                  <PortfolioManager />
+                )}
               </motion.div>
             </AnimatePresence>
 
-            <div className="mt-12 flex justify-end">
-              <button 
-                onClick={handleSave}
-                className="flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-solar to-amber text-obsidian rounded-xl font-bold hover:scale-105 transition-transform"
-              >
-                <Save size={18} /> {t("publish")}
-              </button>
-            </div>
+            {activeTab !== "portfolio" && (
+              <div className="mt-12 flex justify-end">
+                <button 
+                  onClick={handleSave}
+                  className="flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-solar to-amber text-obsidian rounded-xl font-bold hover:scale-105 transition-transform cursor-pointer"
+                >
+                  <Save size={18} /> {t("publish")}
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>
